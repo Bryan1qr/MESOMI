@@ -1,0 +1,50 @@
+---
+title: "Calidad de aire"
+author: "MESOMI"
+logo: quarto.png
+lang: es
+format: 
+  dashboard:
+    orientation: columns
+    theme:
+      light: flatly
+      dark: cyborg
+execute: 
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+library(openair)
+library(openxlsx)
+library(zoo)
+library(ggthemes)
+library(ggforce)
+library(patchwork)
+library(ggrepel)
+# source("Scripts/ECA.R")
+# 
+# df <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
+#           gases = "input/eca_2024_julio.csv",
+#           pm = "input/1405A227561402_2024-08-01_09-11-26.csv",
+#           fecha_inicio = "2024-07-17",
+#           fecha_fin = "2024-07-31",
+#           estacion = "Vigil",
+#           tipo = "lista")
+# 
+# df$head()
+
+```
+
+
+## Datos de iris
+
+```{r}
+
+head(iris)
+```
+
