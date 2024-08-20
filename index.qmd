@@ -142,3 +142,24 @@ datatable(
   ) %>% formatRound(
     columns = colnames(n %>% select(-Fecha)), digits = 2)
 ```
+
+### EMCA - 02
+
+xd
+
+### Mapa web
+
+xdd
+
+### Índice de Calidad de Aire
+
+xdd
+
+
+# Descarga de datos
+
+| Descripción                             | Links de descarga          |
+|-----------------------------------------|----------------------------|
+| Datos diarios de Calidad de aire del 2023 | [eca_2024](input/eca_2024.csv)     |
+| Datos diarios de Calidad de aire del 2024 | [eca_2024](input/eca_2024.csv)     |
+| Reporte de valores diarios mensuales   | [eca_2024](input/eca_2024.csv) |
