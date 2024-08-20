@@ -76,3 +76,69 @@ g2 <- df$df %>%
 
 plotly::ggplotly(g2)
 ```
+
+#### PM2.5
+```{r}
+#| title: "PM2.5 diario"
+
+df$eca<- df$eca %>% 
+  mutate(fecha = as.Date(fecha, format = "%d-%B"))
+
+med <- df$eca$fecha
+
+g3 <- df$eca %>% 
+  ggplot(aes(x = fecha, y = pm25)) +
+  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_text(aes(x = median(fecha),
+                   y = 49,label = "ECA"),
+            color = "red" ) +
+  labs(x = "", y = "PM2.5")+
+  theme_minimal()
+
+plotly::ggplotly(g3)
+```
+
+```{r}
+#| title: "PM2.5 horario"
+
+g4 <- df$df %>% 
+  ggplot(aes(x = date, y = pm25)) +
+  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_line(color = "skyblue") +
+  geom_text(aes(x = median(df$df$date, na.rm = T),
+                   y = 49,label = "ECA",
+                color = "red")) +
+  labs(x = "", y = "PM2.5")+
+  theme_minimal() + theme(legend.position = "none")
+
+plotly::ggplotly(g4)
+```
+
+#### Tabla de datos
+
+```{r}
+#| title: "Datos diarios (ug/m3)"
+library(DT)
+
+n <- df$eca %>% 
+  rename_at(
+      vars(names(.)),
+      ~ c("Fecha", "PM2.5", "PM10", 
+          "NO2", "SO2", "H2S",
+          "CO(1h)", "CO(8h)", "O3(8h)"))
+
+datatable(
+  n, extensions = 'Buttons',
+  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
+  options = list(
+    autowidth = TRUE,
+    pageLength = 20,
+    dom = 'Bfrtip',
+    buttons = list('copy', 'print', list(
+        extend = 'collection',
+        buttons = c('csv', 'excel', 'pdf'),
+        text = 'Download')))
+  ) %>% formatRound(
+    columns = colnames(n %>% select(-Fecha)), digits = 2)
+```
