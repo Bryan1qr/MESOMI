@@ -37,11 +37,42 @@ df <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
           tipo = "lista")
 ```
 
-
-## Datos de la estación
-
+# Datos del 2024
+## column {.tabset}
+### EMCA - 01 {.tabset}
+#### PM10
 ```{r}
+#| title: "PM10 diario"
 
-head(df$df)
+df$eca<- df$eca %>% 
+  mutate(fecha = as.Date(fecha, format = "%d-%B"))
+
+med <- df$eca$fecha
+
+g1 <- df$eca %>% 
+  ggplot(aes(x = fecha, y = pm10)) +
+  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_text(aes(x = median(fecha),
+                   y = 99,label = "ECA"),
+            color = "red") +
+  labs(x = "", y = "PM10")+
+  theme_minimal()
+
+plotly::ggplotly(g1)
 ```
 
+```{r}
+#| title: "PM10 horario"
+
+g2 <- df$df %>% 
+  ggplot(aes(x = date, y = pm10)) +
+  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
+  geom_line(color = "skyblue") +
+  geom_text(aes(x = median(df$df$date, na.rm = T),
+                   y = 99,label = "ECA", color = "red")) +
+  labs(x = "", y = "PM10")+
+  theme_minimal() + theme(legend.position = "none")
+
+plotly::ggplotly(g2)
+```
