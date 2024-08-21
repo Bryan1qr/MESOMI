@@ -52,11 +52,15 @@ med <- df$eca$fecha
 
 g1 <- df$eca %>% 
   ggplot(aes(x = fecha, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
-  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
+  geom_hline(yintercept = 45, lty = 2, color = "darkblue") +
+  geom_bar(stat = "identity", fill = "aquamarine4") +
   geom_text(aes(x = median(fecha),
-                   y = 105,label = "ECA"),
-            color = "red") +
+                   y = 94,label = "ECA"),
+            color = "black") +
+  geom_text(aes(x = median(fecha),
+                   y = 50,label = "OMS"),
+            color = "black") +
   labs(x = "", y = "PM10")+
   theme_minimal()
 
@@ -68,10 +72,13 @@ plotly::ggplotly(g1)
 
 g2 <- df$df %>% 
   ggplot(aes(x = date, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
-  geom_line(color = "skyblue") +
+  geom_line(color = "aquamarine4") +
+  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
+  geom_hline(yintercept = 45, lty = 2, color = "darkblue") +
   geom_text(aes(x = median(df$df$date, na.rm = T),
-                   y = 105,label = "ECA", color = "red")) +
+                   y = 94,label = "ECA", color = "black")) +
+  geom_text(aes(x = median(df$df$date, na.rm = T),
+                   y = 50,label = "OMS", color = "black")) +
   labs(x = "", y = "PM10")+
   theme_minimal() + theme(legend.position = "none")
 
@@ -89,11 +96,11 @@ med <- df$eca$fecha
 
 g3 <- df$eca %>% 
   ggplot(aes(x = fecha, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
   geom_bar(stat = "identity", fill = "skyblue") +
   geom_text(aes(x = median(fecha),
-                   y = 55,label = "ECA"),
-            color = "red" ) +
+                   y = 46,label = "ECA"),
+            color = "black" ) +
   labs(x = "", y = "PM2.5")+
   theme_minimal()
 
@@ -105,11 +112,11 @@ plotly::ggplotly(g3)
 
 g4 <- df$df %>% 
   ggplot(aes(x = date, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
   geom_line(color = "skyblue") +
   geom_text(aes(x = median(df$df$date, na.rm = T),
-                   y = 55,label = "ECA",
-                color = "red")) +
+                   y = 46,label = "ECA",
+                color = "black")) +
   labs(x = "", y = "PM2.5")+
   theme_minimal() + theme(legend.position = "none")
 
@@ -166,11 +173,11 @@ med <- df1$eca$fecha
 
 g5 <- df1$eca %>% 
   ggplot(aes(x = fecha, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
+  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
   geom_bar(stat = "identity", fill = "skyblue") +
   geom_text(aes(x = median(fecha),
-                   y = 105,label = "ECA"),
-            color = "red") +
+                   y = 94,label = "ECA"),
+            color = "black") +
   labs(x = "", y = "PM10")+
   theme_minimal()
 
@@ -182,10 +189,10 @@ plotly::ggplotly(g5)
 
 g6 <- df1$df %>% 
   ggplot(aes(x = date, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
+  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
   geom_line(color = "skyblue") +
   geom_text(aes(x = median(df1$df$date, na.rm = T),
-                   y = 105,label = "ECA", color = "red")) +
+                   y = 94,label = "ECA", color = "black")) +
   labs(x = "", y = "PM10")+
   theme_minimal() + theme(legend.position = "none")
 
@@ -201,11 +208,11 @@ df1$eca<- df1$eca %>%
 
 g7 <- df1$eca %>% 
   ggplot(aes(x = fecha, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
   geom_bar(stat = "identity", fill = "skyblue") +
   geom_text(aes(x = median(fecha),
-                   y = 55,label = "ECA"),
-            color = "red" ) +
+                   y = 46,label = "ECA"),
+            color = "black" ) +
   labs(x = "", y = "PM2.5")+
   theme_minimal()
 
@@ -217,11 +224,11 @@ plotly::ggplotly(g7)
 
 g8 <- df1$df %>% 
   ggplot(aes(x = date, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
   geom_line(color = "skyblue") +
   geom_text(aes(x = median(df1$df$date, na.rm = T),
-                   y = 55,label = "ECA",
-                color = "red")) +
+                   y = 46,label = "ECA",
+                color = "black")) +
   labs(x = "", y = "PM2.5")+
   theme_minimal() + theme(legend.position = "none")
 
