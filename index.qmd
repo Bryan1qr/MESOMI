@@ -8,7 +8,7 @@ format:
     orientation: columns
     theme:
       light: flatly
-      dark: cyborg
+      dark: superhero
 execute: 
   message: false
   warning: false
@@ -28,12 +28,13 @@ library(patchwork)
 library(ggrepel)
 source("Scripts/ECA.R")
 
+# Cargando datos del punto de hipólito unanue:
 df <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
           gases = "input/eca_2024_julio.csv",
-          pm = "input/1405A227561402_2024-08-01_09-11-26.csv",
-          fecha_inicio = "2024-07-17",
-          fecha_fin = "2024-07-31",
-          estacion = "Vigil",
+          pm = "input/pm_junio.csv",
+          fecha_inicio = "2024-06-21",
+          fecha_fin = "2024-06-30",
+          estacion = "Unanue",
           tipo = "lista")
 ```
 
@@ -54,7 +55,7 @@ g1 <- df$eca %>%
   geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
   geom_bar(stat = "identity", fill = "skyblue") +
   geom_text(aes(x = median(fecha),
-                   y = 99,label = "ECA"),
+                   y = 105,label = "ECA"),
             color = "red") +
   labs(x = "", y = "PM10")+
   theme_minimal()
@@ -70,7 +71,7 @@ g2 <- df$df %>%
   geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
   geom_line(color = "skyblue") +
   geom_text(aes(x = median(df$df$date, na.rm = T),
-                   y = 99,label = "ECA", color = "red")) +
+                   y = 105,label = "ECA", color = "red")) +
   labs(x = "", y = "PM10")+
   theme_minimal() + theme(legend.position = "none")
 
@@ -91,7 +92,7 @@ g3 <- df$eca %>%
   geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
   geom_bar(stat = "identity", fill = "skyblue") +
   geom_text(aes(x = median(fecha),
-                   y = 49,label = "ECA"),
+                   y = 55,label = "ECA"),
             color = "red" ) +
   labs(x = "", y = "PM2.5")+
   theme_minimal()
@@ -107,7 +108,7 @@ g4 <- df$df %>%
   geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
   geom_line(color = "skyblue") +
   geom_text(aes(x = median(df$df$date, na.rm = T),
-                   y = 49,label = "ECA",
+                   y = 55,label = "ECA",
                 color = "red")) +
   labs(x = "", y = "PM2.5")+
   theme_minimal() + theme(legend.position = "none")
@@ -130,7 +131,7 @@ n <- df$eca %>%
 
 datatable(
   n, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
+  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
@@ -143,9 +144,117 @@ datatable(
     columns = colnames(n %>% select(-Fecha)), digits = 2)
 ```
 
-### EMCA - 02
+### EMCA - 02 {.tabset}
+#### PM10
 
-xd
+```{r}
+#| title: "PM10 diario"
+
+# Cargando datos del punto de instituto vigil:
+df1 <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
+          gases = "input/eca_2024_julio.csv",
+          pm = "input/1405A227561402_2024-08-01_09-11-26.csv",
+          fecha_inicio = "2024-07-17",
+          fecha_fin = "2024-07-31",
+          estacion = "Vigil",
+          tipo = "lista")
+
+df1$eca<- df1$eca %>% 
+  mutate(fecha = as.Date(fecha, format = "%d-%B"))
+
+med <- df1$eca$fecha
+
+g5 <- df1$eca %>% 
+  ggplot(aes(x = fecha, y = pm10)) +
+  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_text(aes(x = median(fecha),
+                   y = 105,label = "ECA"),
+            color = "red") +
+  labs(x = "", y = "PM10")+
+  theme_minimal()
+
+plotly::ggplotly(g5)
+```
+
+```{r}
+#| title: "PM10 horario"
+
+g6 <- df1$df %>% 
+  ggplot(aes(x = date, y = pm10)) +
+  geom_hline(yintercept = 100, lty = 2, color = "hotpink") +
+  geom_line(color = "skyblue") +
+  geom_text(aes(x = median(df1$df$date, na.rm = T),
+                   y = 105,label = "ECA", color = "red")) +
+  labs(x = "", y = "PM10")+
+  theme_minimal() + theme(legend.position = "none")
+
+plotly::ggplotly(g6)
+```
+
+#### PM2.5
+```{r}
+#| title: "PM2.5 diario"
+
+df1$eca<- df1$eca %>% 
+  mutate(fecha = as.Date(fecha, format = "%d-%B"))
+
+g7 <- df1$eca %>% 
+  ggplot(aes(x = fecha, y = pm25)) +
+  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_text(aes(x = median(fecha),
+                   y = 55,label = "ECA"),
+            color = "red" ) +
+  labs(x = "", y = "PM2.5")+
+  theme_minimal()
+
+plotly::ggplotly(g7)
+```
+
+```{r}
+#| title: "PM2.5 horario"
+
+g8 <- df1$df %>% 
+  ggplot(aes(x = date, y = pm25)) +
+  geom_hline(yintercept = 50, lty = 2, color = "hotpink") +
+  geom_line(color = "skyblue") +
+  geom_text(aes(x = median(df1$df$date, na.rm = T),
+                   y = 55,label = "ECA",
+                color = "red")) +
+  labs(x = "", y = "PM2.5")+
+  theme_minimal() + theme(legend.position = "none")
+
+plotly::ggplotly(g8)
+```
+
+#### Tabla de datos
+
+```{r}
+#| title: "Datos diarios (ug/m3)"
+library(DT)
+
+n1 <- df1$eca %>% 
+  rename_at(
+      vars(names(.)),
+      ~ c("Fecha", "PM2.5", "PM10", 
+          "NO2", "SO2", "H2S",
+          "CO(1h)", "CO(8h)", "O3(8h)"))
+
+datatable(
+  n1, extensions = 'Buttons',
+  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
+  options = list(
+    autowidth = TRUE,
+    pageLength = 20,
+    dom = 'Bfrtip',
+    buttons = list('copy', 'print', list(
+        extend = 'collection',
+        buttons = c('csv', 'excel', 'pdf'),
+        text = 'Download')))
+  ) %>% formatRound(
+    columns = colnames(n1 %>% select(-Fecha)), digits = 2)
+```
 
 ### Mapa web
 
