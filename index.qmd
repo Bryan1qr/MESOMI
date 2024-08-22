@@ -1,11 +1,11 @@
 ---
 title: "Calidad de aire"
 author: "MESOMI"
-logo: quarto.png
 lang: es
 format: 
   dashboard:
     orientation: columns
+    logo: quarto.png
     theme:
       light: flatly
       dark: superhero
@@ -26,6 +26,8 @@ library(ggthemes)
 library(ggforce)
 library(patchwork)
 library(ggrepel)
+library(openairmaps)
+library(leaflet)
 source("Scripts/ECA.R")
 
 # Cargando datos del punto de hipólito unanue:
@@ -36,6 +38,14 @@ df <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
           fecha_fin = "2024-06-30",
           estacion = "Unanue",
           tipo = "lista")
+
+df1 <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
+           gases = "input/eca_2024_julio.csv",
+           pm = "input/1405A227561402_2024-08-01_09-11-26.csv",
+           fecha_inicio = "2024-07-17",
+           fecha_fin = "2024-07-31",
+           estacion = "Vigil",
+           tipo = "lista")
 ```
 
 # Datos del 2024
@@ -52,15 +62,15 @@ med <- df$eca$fecha
 
 g1 <- df$eca %>% 
   ggplot(aes(x = fecha, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
-  geom_hline(yintercept = 45, lty = 2, color = "darkblue") +
-  geom_bar(stat = "identity", fill = "aquamarine4") +
+  geom_hline(yintercept = 100, lty = 2,lwd = 0.2, color = "black") +
+  geom_hline(yintercept = 45, lty = 3, color = "black") +
+  geom_bar(stat = "identity", fill = "skyblue") +
   geom_text(aes(x = median(fecha),
-                   y = 94,label = "ECA"),
-            color = "black") +
+                   y = 90,label = "ECA"),
+            color = "red") +
   geom_text(aes(x = median(fecha),
                    y = 50,label = "OMS"),
-            color = "black") +
+            color = "red") +
   labs(x = "", y = "PM10")+
   theme_minimal()
 
@@ -72,55 +82,18 @@ plotly::ggplotly(g1)
 
 g2 <- df$df %>% 
   ggplot(aes(x = date, y = pm10)) +
-  geom_line(color = "aquamarine4") +
-  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
-  geom_hline(yintercept = 45, lty = 2, color = "darkblue") +
+  geom_line(color = "skyblue") +
+  geom_hline(yintercept = 100, lty = 2, lwd = 0.2, color = "black") +
+  geom_hline(yintercept = 45, lty = 3, color = "black") +
   geom_text(aes(x = median(df$df$date, na.rm = T),
-                   y = 94,label = "ECA", color = "black")) +
+                   y = 90,label = "ECA", color = "red")) +
   geom_text(aes(x = median(df$df$date, na.rm = T),
-                   y = 50,label = "OMS", color = "black")) +
+                   y = 50,label = "OMS", color = "red")) +
   labs(x = "", y = "PM10")+
   theme_minimal() + theme(legend.position = "none")
 
 plotly::ggplotly(g2)
-```
 
-#### PM2.5
-```{r}
-#| title: "PM2.5 diario"
-
-df$eca<- df$eca %>% 
-  mutate(fecha = as.Date(fecha, format = "%d-%B"))
-
-med <- df$eca$fecha
-
-g3 <- df$eca %>% 
-  ggplot(aes(x = fecha, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  geom_text(aes(x = median(fecha),
-                   y = 46,label = "ECA"),
-            color = "black" ) +
-  labs(x = "", y = "PM2.5")+
-  theme_minimal()
-
-plotly::ggplotly(g3)
-```
-
-```{r}
-#| title: "PM2.5 horario"
-
-g4 <- df$df %>% 
-  ggplot(aes(x = date, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
-  geom_line(color = "skyblue") +
-  geom_text(aes(x = median(df$df$date, na.rm = T),
-                   y = 46,label = "ECA",
-                color = "black")) +
-  labs(x = "", y = "PM2.5")+
-  theme_minimal() + theme(legend.position = "none")
-
-plotly::ggplotly(g4)
 ```
 
 #### Tabla de datos
@@ -151,88 +124,51 @@ datatable(
     columns = colnames(n %>% select(-Fecha)), digits = 2)
 ```
 
+
 ### EMCA - 02 {.tabset}
 #### PM10
-
 ```{r}
 #| title: "PM10 diario"
-
-# Cargando datos del punto de instituto vigil:
-df1 <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
-          gases = "input/eca_2024_julio.csv",
-          pm = "input/1405A227561402_2024-08-01_09-11-26.csv",
-          fecha_inicio = "2024-07-17",
-          fecha_fin = "2024-07-31",
-          estacion = "Vigil",
-          tipo = "lista")
 
 df1$eca<- df1$eca %>% 
   mutate(fecha = as.Date(fecha, format = "%d-%B"))
 
 med <- df1$eca$fecha
 
-g5 <- df1$eca %>% 
+g3 <- df1$eca %>% 
   ggplot(aes(x = fecha, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
+  geom_hline(yintercept = 100, lty = 2,lwd = 0.2, color = "black") +
+  geom_hline(yintercept = 45, lty = 3, color = "black") +
   geom_bar(stat = "identity", fill = "skyblue") +
   geom_text(aes(x = median(fecha),
-                   y = 94,label = "ECA"),
-            color = "black") +
+                   y = 90,label = "ECA"),
+            color = "red") +
+  geom_text(aes(x = median(fecha),
+                   y = 50,label = "OMS"),
+            color = "red") +
   labs(x = "", y = "PM10")+
   theme_minimal()
 
-plotly::ggplotly(g5)
+plotly::ggplotly(g3)
 ```
 
 ```{r}
 #| title: "PM10 horario"
 
-g6 <- df1$df %>% 
+g4 <- df1$df %>% 
   ggplot(aes(x = date, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2, color = "darkgreen") +
   geom_line(color = "skyblue") +
+  geom_hline(yintercept = 100, lty = 2, lwd = 0.2, color = "black") +
+  geom_hline(yintercept = 45, lty = 3, color = "black") +
   geom_text(aes(x = median(df1$df$date, na.rm = T),
-                   y = 94,label = "ECA", color = "black")) +
+                   y = 90,label = "ECA", color = "red")) +
+  geom_text(aes(x = median(df1$df$date, na.rm = T),
+                   y = 50,label = "OMS", color = "red")) +
   labs(x = "", y = "PM10")+
   theme_minimal() + theme(legend.position = "none")
 
-plotly::ggplotly(g6)
-```
+plotly::ggplotly(g4)
 
-#### PM2.5
-```{r}
-#| title: "PM2.5 diario"
-
-df1$eca<- df1$eca %>% 
-  mutate(fecha = as.Date(fecha, format = "%d-%B"))
-
-g7 <- df1$eca %>% 
-  ggplot(aes(x = fecha, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  geom_text(aes(x = median(fecha),
-                   y = 46,label = "ECA"),
-            color = "black" ) +
-  labs(x = "", y = "PM2.5")+
-  theme_minimal()
-
-plotly::ggplotly(g7)
-```
-
-```{r}
-#| title: "PM2.5 horario"
-
-g8 <- df1$df %>% 
-  ggplot(aes(x = date, y = pm25)) +
-  geom_hline(yintercept = 50, lty = 2, color = "darkgreen") +
-  geom_line(color = "skyblue") +
-  geom_text(aes(x = median(df1$df$date, na.rm = T),
-                   y = 46,label = "ECA",
-                color = "black")) +
-  labs(x = "", y = "PM2.5")+
-  theme_minimal() + theme(legend.position = "none")
-
-plotly::ggplotly(g8)
 ```
 
 #### Tabla de datos
@@ -250,7 +186,7 @@ n1 <- df1$eca %>%
 
 datatable(
   n1, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
+  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
@@ -263,9 +199,31 @@ datatable(
     columns = colnames(n1 %>% select(-Fecha)), digits = 2)
 ```
 
+
 ### Mapa web
 
-xdd
+```{r}
+#| padding: 0px
+dfm <- df$df %>% mutate(lat = -18.004275, lon = -70.257304,
+                        estacion = "EMCA - 01")
+
+dfm1 <- df1$df %>% mutate(lat = -17.993250, lon = -70.243305,
+                        estacion = "EMCA - 02")
+
+dfm <- rbind(dfm, dfm1)
+
+polarMap(data = dfm,
+         pollutant = c("pm10", "pm25", "no2", "o3"),
+         latitude = "lat",
+         longitude = "lon",
+         alpha = 1, cols = "jet",
+         label = "estacion", collapse.control = T,
+         provider = c("CartoDB.Positron",
+                      "OpenStreetMap", "Esri.WorldImagery"), draw.legend = T) %>% 
+  addPopups(lng = -70.257304, lat = -18.004275, popup = "EMCA - 01") %>% 
+  addPopups(lng = -70.243305, lat = -17.993250, popup = "EMCA - 02")
+```
+
 
 ### Índice de Calidad de Aire
 
