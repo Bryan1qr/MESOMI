@@ -5,7 +5,7 @@ lang: es
 format: 
   dashboard:
     orientation: columns
-    logo: quarto.png
+    logo: mesomi_logo.png
     theme:
       light: flatly
       dark: superhero
