@@ -307,9 +307,8 @@ polarMap(data = dfm,
          alpha = 1, cols = "jet",
          label = "estacion", collapse.control = T,
          provider = c("CartoDB.Positron",
-                      "OpenStreetMap", "Esri.WorldImagery"), draw.legend = T) %>% 
-  addPopups(lng = -70.257304, lat = -18.004275, popup = "EMCA - 01") %>% 
-  addPopups(lng = -70.243305, lat = -17.993250, popup = "EMCA - 02")
+                      "OpenStreetMap", "Esri.WorldImagery"),
+         popup = "estacion", key = T)
 ```
 
 
