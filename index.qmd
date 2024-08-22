@@ -28,6 +28,7 @@ library(patchwork)
 library(ggrepel)
 library(openairmaps)
 library(leaflet)
+library(plotly)
 source("Scripts/ECA.R")
 
 # Cargando datos del punto de hipólito unanue:
@@ -94,6 +95,58 @@ g2 <- df$df %>%
 
 plotly::ggplotly(g2)
 
+```
+
+#### Índice de Calidad de Aire
+
+```{r}
+source("Scripts/AQI.R")
+
+aqi <- c(Bueno = "#00E400", Moderado = "#FFFF00",
+         `No saludable para grupos sensibles` = "#FF7E00",
+         xdd = "#FF0000",
+         xdd2 = "#8F3F97", xdd3 = "#7E0023")
+
+# param2 <- c(co =  bquote(bold(CO)),
+#              no2 =  bquote(bold(NO[2])),
+#              o3 = bquote(bold(O[3])),
+#              pm10 = bquote(bold(PM[10])),
+#              pm25 = bquote(bold(PM[2.5])),
+#              so2 = bquote(bold(SO[2])))
+param2 <- c(co =  "CO",
+            no2 =  "NO2",
+            o3 = "O3",
+            pm10 = "PM10",
+            pm25 = "PM2.5",
+            so2 = "SO2")
+
+aqi_index(df$eca) %>%
+  mutate(aqi_ind = round(aqi_ind),
+         fecha = as.Date(fecha, format = "%d-%B"),
+         fecha = format(fecha, format = "%d")) %>%
+  ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
+  geom_tile(color = "white", lwd =1)+
+  geom_text(aes(label = aqi_ind)) +
+  scale_fill_manual(values = aqi) +
+  scale_y_discrete(labels = param2) +
+  labs(x = "Dias de junio", y = "",
+    title = "Índice de Calidad de Aire",
+    fill = "Categoría") +
+    theme_minimal()+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) -> aqi1
+
+
+plotly::ggplotly(aqi1) %>%
+  layout(
+    legend = list(
+      orientation = 'h',
+      x = 0.5,
+      y = 1.07,
+      xanchor = 'center',
+      yanchor = 'top'
+    )
+  )
 ```
 
 #### Tabla de datos
@@ -171,6 +224,38 @@ plotly::ggplotly(g4)
 
 ```
 
+#### Índice de Calidad de Aire
+
+```{r}
+aqi_index(df1$eca) %>%
+  mutate(aqi_ind = round(aqi_ind),
+         fecha = as.Date(fecha, format = "%d-%B"),
+         fecha = format(fecha, format = "%d")) %>%
+  ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
+  geom_tile(color = "white", lwd =1)+
+  geom_text(aes(label = aqi_ind)) +
+  scale_fill_manual(values = aqi) +
+  scale_y_discrete(labels = param2) +
+  labs(x = "Dias de julio", y = "",
+    title = "Índice de Calidad de Aire",
+    fill = "Categoría") +
+    theme_minimal()+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) -> aqi2
+
+
+plotly::ggplotly(aqi2) %>%
+  layout(
+    legend = list(
+      orientation = 'h',
+      x = 0.5,
+      y = 1.07,
+      xanchor = 'center',
+      yanchor = 'top'
+    )
+  )
+```
+
 #### Tabla de datos
 
 ```{r}
@@ -211,9 +296,12 @@ dfm1 <- df1$df %>% mutate(lat = -17.993250, lon = -70.243305,
                         estacion = "EMCA - 02")
 
 dfm <- rbind(dfm, dfm1)
+dfm$co <- NULL
+dfm <- dfm %>% mutate(co = co_1) %>% select(-co_1)
 
 polarMap(data = dfm,
-         pollutant = c("pm10", "pm25", "no2", "o3"),
+         pollutant = c("pm10", "pm25", "no2",
+                       "o3", "so2", "h2s", "co"),
          latitude = "lat",
          longitude = "lon",
          alpha = 1, cols = "jet",
@@ -223,11 +311,6 @@ polarMap(data = dfm,
   addPopups(lng = -70.257304, lat = -18.004275, popup = "EMCA - 01") %>% 
   addPopups(lng = -70.243305, lat = -17.993250, popup = "EMCA - 02")
 ```
-
-
-### Índice de Calidad de Aire
-
-xdd
 
 
 # Descarga de datos
