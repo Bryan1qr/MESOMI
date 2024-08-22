@@ -7,7 +7,7 @@ format:
     orientation: columns
     logo: mesomi_logo.png
     theme:
-      light: flatly
+      light: minty
       dark: superhero
 execute: 
   message: false
@@ -271,7 +271,7 @@ n1 <- df1$eca %>%
 
 datatable(
   n1, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
+  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
@@ -304,11 +304,12 @@ polarMap(data = dfm,
                        "o3", "so2", "h2s", "co"),
          latitude = "lat",
          longitude = "lon",
-         alpha = 1, cols = "jet",
+         alpha = 0.7, cols = "turbo",
          label = "estacion", collapse.control = T,
          provider = c("CartoDB.Positron",
                       "OpenStreetMap", "Esri.WorldImagery"),
-         popup = "estacion", key = T)
+         popup = "estacion", key = T,
+         d.icon = 310)
 ```
 
 
