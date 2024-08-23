@@ -29,6 +29,7 @@ library(ggrepel)
 library(openairmaps)
 library(leaflet)
 library(plotly)
+library(highcharter)
 source("Scripts/ECA.R")
 
 # Cargando datos del punto de hipólito unanue:
