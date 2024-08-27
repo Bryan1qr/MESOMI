@@ -82,6 +82,43 @@ plotly::ggplotly(g1)
 ```{r}
 #| title: "PM10 horario"
 
+plot_ly(df$df, x = ~date, y = ~pm10,
+        type = 'scatter', mode = 'lines',
+        line = list(color = 'skyblue')) %>%
+  # Líneas horizontales con etiquetas
+  add_segments(x = min(df$df$date),
+               xend = max(df$df$date),
+               y = 100, yend = 100,
+               line = list(dash = 'dash',
+                           width = 0.2, color = 'black')) %>%
+  
+  add_segments(x = min(df$df$date),
+               xend = max(df$df$date),
+               y = 45, yend = 45,
+               line = list(dash = 'dot',
+                           color = 'black')) %>%
+  
+  # Etiquetas de OMS y ECA como labels
+  add_trace(x = median(df$df$date, na.rm = TRUE),
+            y = 100, type = "scatter", mode = "text",
+            text = "ECA", textposition = "top right", 
+            textfont = list(color = "red",
+                            size = 12, family = "Arial", weight = "bold"),
+            showlegend = FALSE) %>%
+  
+  add_trace(x = median(df$df$date, na.rm = TRUE),
+            y = 45, type = "scatter", mode = "text",
+            text = "OMS", textposition = "top right", 
+            textfont = list(color = "red",
+                            size = 12, family = "Arial", weight = "bold"),
+            showlegend = FALSE) %>%
+  
+  # Etiquetas y tema
+  layout(yaxis = list(title = "PM10"),
+    showlegend = FALSE,
+    margin = list(t = 50),
+    plot_bgcolor = "rgba(0, 0, 0, 0)",
+    paper_bgcolor = "rgba(0, 0, 0, 0)")
 ```
 
 #### Índice de Calidad de Aire
