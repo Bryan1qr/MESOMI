@@ -48,6 +48,14 @@ df1 <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
            fecha_fin = "2024-07-31",
            estacion = "Vigil",
            tipo = "lista")
+
+df2 <- ECA(meteo = "input/CR1000_AGOSTO_2024.csv",
+           gases = "input/gases_odria_agosto.csv",
+           pm = "input/pm_agosto_odria.csv",
+           fecha_inicio = "2024-08-08",
+           fecha_fin = "2024-08-18",
+           estacion = "Odría",
+           tipo = "lista")
 ```
 
 # Datos del 2024
@@ -261,7 +269,83 @@ datatable(
     columns = colnames(n1 %>% select(-Fecha)), digits = 2)
 ```
 
+### EMCA - 03 {.tabset}
+#### PM10
 
+```{r}
+#| title: "PM10 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df2$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm10)
+    ), 
+    type = "line", 
+    name = "PM10",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 100,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 45,
+      dashStyle = "Solid",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### Tabla de datos
+
+```{r}
+#| title: "Datos diarios (ug/m3)"
+library(DT)
+
+n2 <- df2$eca %>% 
+  rename_at(
+      vars(names(.)),
+      ~ c("Fecha", "PM2.5", "PM10", 
+          "NO2", "SO2", "H2S",
+          "CO(1h)", "CO(8h)", "O3(8h)"))
+
+datatable(
+  n2, extensions = 'Buttons',
+  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
+  options = list(
+    autowidth = TRUE,
+    pageLength = 20,
+    dom = 'Bfrtip',
+    buttons = list('copy', 'print', list(
+        extend = 'collection',
+        buttons = c('csv', 'excel', 'pdf'),
+        text = 'Download')))
+  ) %>% formatRound(
+    columns = colnames(n2 %>% select(-Fecha)), digits = 2)
+```
 ### Mapa web
 
 ```{r}
@@ -272,7 +356,10 @@ dfm <- df$df %>% mutate(lat = -18.004275, lon = -70.257304,
 dfm1 <- df1$df %>% mutate(lat = -17.993250, lon = -70.243305,
                         estacion = "EMCA - 02")
 
-dfm <- rbind(dfm, dfm1)
+dfm2 <- df2$df %>% mutate(lat = -17.980364, lon = -70.239032,
+                        estacion = "EMCA - 03")
+
+dfm <- rbind(dfm, dfm1, dfm2)
 dfm$co <- NULL
 dfm <- dfm %>% mutate(co = co_1) %>% select(-co_1)
 
@@ -286,7 +373,7 @@ polarMap(data = dfm,
          provider = c("CartoDB.Positron",
                       "OpenStreetMap", "Esri.WorldImagery"),
          popup = "estacion", key = T,
-         d.icon = 310)
+         d.icon = 300)
 ```
 
 
@@ -297,3 +384,15 @@ polarMap(data = dfm,
 | Datos diarios de Calidad de aire del 2023 | [eca_2024](input/eca_2024.csv)     |
 | Datos diarios de Calidad de aire del 2024 | [eca_2024](input/eca_2024.csv)     |
 | Reporte de valores diarios mensuales   | [eca_2024](input/eca_2024.csv) |
+
+
+<!-- confirmar los cambios en git: -->
+<!-- git add . -->
+
+<!-- hacer un commit -->
+<!-- git commit -m "nombredelcommit" -->
+
+<!-- Hacer el push -->
+<!-- git push -u origin main -->
+
+
