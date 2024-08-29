@@ -110,6 +110,54 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
+#### PM2.5
+
+```{r}
+#| title: "PM2.5 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm25)
+    ), 
+    type = "line", 
+    name = "PM2.5",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 50,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 15,
+      dashStyle = "Solid",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
 #### Índice de Calidad de Aire
 
 ```{r}
@@ -241,6 +289,88 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
+#### PM2.5
+
+```{r}
+#| title: "PM2.5 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm25)
+    ), 
+    type = "line", 
+    name = "PM2.5",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 50,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 15,
+      dashStyle = "Solid",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### Índice de Calidad de Aire
+
+```{r}
+
+aqi_index(df1$eca) %>%
+  mutate(aqi_ind = round(aqi_ind),
+         fecha = as.Date(fecha, format = "%d-%B"),
+         fecha = format(fecha, format = "%d")) %>%
+  ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
+  geom_tile(color = "white", lwd =1)+
+  geom_text(aes(label = aqi_ind)) +
+  scale_fill_manual(values = aqi) +
+  scale_y_discrete(labels = param2) +
+  labs(x = "Dias de junio", y = "",
+    title = "Índice de Calidad de Aire",
+    fill = "Categoría") +
+    theme_minimal()+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) -> aqi2
+
+
+plotly::ggplotly(aqi2) %>%
+  layout(
+    legend = list(
+      orientation = 'h',
+      x = 0.5,
+      y = 1.07,
+      xanchor = 'center',
+      yanchor = 'top'
+    )
+  )
+```
+
 #### Tabla de datos
 
 ```{r}
@@ -317,6 +447,88 @@ highchart() %>%
                       "downloadCSV",
                       "downloadXLS",
                       "downloadPDF"))))
+```
+
+#### PM2.5
+
+```{r}
+#| title: "PM2.5 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df2$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm25)
+    ), 
+    type = "line", 
+    name = "PM2.5",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 50,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 15,
+      dashStyle = "Solid",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### Índice de Calidad de Aire
+
+```{r}
+
+aqi_index(df2$eca) %>%
+  mutate(aqi_ind = round(aqi_ind),
+         fecha = as.Date(fecha, format = "%d-%B"),
+         fecha = format(fecha, format = "%d")) %>%
+  ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
+  geom_tile(color = "white", lwd =1)+
+  geom_text(aes(label = aqi_ind)) +
+  scale_fill_manual(values = aqi) +
+  scale_y_discrete(labels = param2) +
+  labs(x = "Dias de junio", y = "",
+    title = "Índice de Calidad de Aire",
+    fill = "Categoría") +
+    theme_minimal()+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) -> aqi3
+
+
+plotly::ggplotly(aqi3) %>%
+  layout(
+    legend = list(
+      orientation = 'h',
+      x = 0.5,
+      y = 1.07,
+      xanchor = 'center',
+      yanchor = 'top'
+    )
+  )
 ```
 
 #### Tabla de datos
