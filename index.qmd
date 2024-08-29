@@ -298,7 +298,7 @@ highchart() %>%
   hc_chart(zoomType = "x") %>% 
   hc_add_series(
     data = list_parse2(
-      df$df %>% mutate(
+      df1$df %>% mutate(
         date = as.numeric(date) * 1000) %>% 
         select(date, pm25)
     ), 
