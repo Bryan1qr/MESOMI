@@ -7,7 +7,7 @@ format:
     orientation: columns
     logo: mesomi_logo.png
     theme:
-      light: minty
+      light: flatly
       dark: superhero
 execute: 
   message: false
@@ -54,71 +54,52 @@ df1 <- ECA(meteo = "input/CR1000_JULIO_2024.csv",
 ## column {.tabset}
 ### EMCA - 01 {.tabset}
 #### PM10
-```{r}
-#| title: "PM10 diario"
-
-df$eca<- df$eca %>% 
-  mutate(fecha = as.Date(fecha, format = "%d-%B"))
-
-med <- df$eca$fecha
-
-g1 <- df$eca %>% 
-  ggplot(aes(x = fecha, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2,lwd = 0.2, color = "black") +
-  geom_hline(yintercept = 45, lty = 3, color = "black") +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  geom_text(aes(x = median(fecha),
-                   y = 90,label = "ECA"),
-            color = "red") +
-  geom_text(aes(x = median(fecha),
-                   y = 50,label = "OMS"),
-            color = "red") +
-  labs(x = "", y = "PM10")+
-  theme_minimal()
-
-plotly::ggplotly(g1)
-```
 
 ```{r}
 #| title: "PM10 horario"
 
-plot_ly(df$df, x = ~date, y = ~pm10,
-        type = 'scatter', mode = 'lines',
-        line = list(color = 'skyblue')) %>%
-  # Líneas horizontales con etiquetas
-  add_segments(x = min(df$df$date),
-               xend = max(df$df$date),
-               y = 100, yend = 100,
-               line = list(dash = 'dash',
-                           width = 0.2, color = 'black')) %>%
-  
-  add_segments(x = min(df$df$date),
-               xend = max(df$df$date),
-               y = 45, yend = 45,
-               line = list(dash = 'dot',
-                           color = 'black')) %>%
-  
-  # Etiquetas de OMS y ECA como labels
-  add_trace(x = median(df$df$date, na.rm = TRUE),
-            y = 100, type = "scatter", mode = "text",
-            text = "ECA", textposition = "top right", 
-            textfont = list(color = "red",
-                            size = 12, family = "Arial", weight = "bold"),
-            showlegend = FALSE) %>%
-  
-  add_trace(x = median(df$df$date, na.rm = TRUE),
-            y = 45, type = "scatter", mode = "text",
-            text = "OMS", textposition = "top right", 
-            textfont = list(color = "red",
-                            size = 12, family = "Arial", weight = "bold"),
-            showlegend = FALSE) %>%
-  
-  # Etiquetas y tema
-  layout(yaxis = list(title = "PM10"),
-    showlegend = FALSE,
-    margin = list(t = 50),
-    plot_bgcolor = "rgba(0, 0, 0, 0)",
-    paper_bgcolor = "rgba(0, 0, 0, 0)")
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm10)
+    ), 
+    type = "line", 
+    name = "PM10",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 100,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 45,
+      dashStyle = "Solid",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
 ```
 
 #### Índice de Calidad de Aire
@@ -204,80 +185,52 @@ datatable(
 
 ### EMCA - 02 {.tabset}
 #### PM10
-```{r}
-#| title: "PM10 diario"
-
-df1$eca<- df1$eca %>% 
-  mutate(fecha = as.Date(fecha, format = "%d-%B"))
-
-med <- df1$eca$fecha
-
-g3 <- df1$eca %>% 
-  ggplot(aes(x = fecha, y = pm10)) +
-  geom_hline(yintercept = 100, lty = 2,lwd = 0.2, color = "black") +
-  geom_hline(yintercept = 45, lty = 3, color = "black") +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  geom_text(aes(x = median(fecha),
-                   y = 90,label = "ECA"),
-            color = "red") +
-  geom_text(aes(x = median(fecha),
-                   y = 50,label = "OMS"),
-            color = "red") +
-  labs(x = "", y = "PM10")+
-  theme_minimal()
-
-plotly::ggplotly(g3)
-```
 
 ```{r}
 #| title: "PM10 horario"
 
-g4 <- df1$df %>% 
-  ggplot(aes(x = date, y = pm10)) +
-  geom_line(color = "skyblue") +
-  geom_hline(yintercept = 100, lty = 2, lwd = 0.2, color = "black") +
-  geom_hline(yintercept = 45, lty = 3, color = "black") +
-  geom_text(aes(x = median(df1$df$date, na.rm = T),
-                   y = 90,label = "ECA", color = "red")) +
-  geom_text(aes(x = median(df1$df$date, na.rm = T),
-                   y = 50,label = "OMS", color = "red")) +
-  labs(x = "", y = "PM10")+
-  theme_minimal() + theme(legend.position = "none")
-
-plotly::ggplotly(g4)
-
-```
-
-#### Índice de Calidad de Aire
-
-```{r}
-aqi_index(df1$eca) %>%
-  mutate(aqi_ind = round(aqi_ind),
-         fecha = as.Date(fecha, format = "%d-%B"),
-         fecha = format(fecha, format = "%d")) %>%
-  ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
-  geom_tile(color = "white", lwd =1)+
-  geom_text(aes(label = aqi_ind)) +
-  scale_fill_manual(values = aqi) +
-  scale_y_discrete(labels = param2) +
-  labs(x = "Dias de julio", y = "",
-    title = "Índice de Calidad de Aire",
-    fill = "Categoría") +
-    theme_minimal()+
-  theme(legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5)) -> aqi2
-
-
-plotly::ggplotly(aqi2) %>%
-  layout(
-    legend = list(
-      orientation = 'h',
-      x = 0.5,
-      y = 1.07,
-      xanchor = 'center',
-      yanchor = 'top'
-    )
-  )
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df1$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm10)
+    ), 
+    type = "line", 
+    name = "PM10",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 100,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 45,
+      dashStyle = "Solid",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
 ```
 
 #### Tabla de datos
