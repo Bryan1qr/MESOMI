@@ -56,6 +56,14 @@ df2 <- ECA(meteo = "input/CR1000_AGOSTO_2024.csv",
            fecha_fin = "2024-08-18",
            estacion = "Odría",
            tipo = "lista")
+
+df3 <- ECA(meteo = "input/CR1000_AGOSTO_UNJBG_2024.csv",
+           gases = "input/GASES_AGOSTO_EPSG-UNJBG_2024.csv",
+           pm = "input/pm_agosto_epsg_unjbg.csv",
+           fecha_inicio = "2024-08-23",
+           fecha_fin = "2024-08-31",
+           estacion = "epsg_unjbg",
+           tipo = "lista")
 ```
 
 # Datos del 2024
@@ -571,7 +579,10 @@ dfm1 <- df1$df %>% mutate(lat = -17.993250, lon = -70.243305,
 dfm2 <- df2$df %>% mutate(lat = -17.980364, lon = -70.239032,
                         estacion = "EMCA - 03")
 
-dfm <- rbind(dfm, dfm1, dfm2)
+dfm3 <- df3$df %>% mutate(lat = -18.00676, lon = -70.23816,
+                        estacion = "EMCA - 04")
+
+dfm <- rbind(dfm, dfm1, dfm2, dfm3)
 dfm$co <- NULL
 dfm <- dfm %>% mutate(co = co_1) %>% select(-co_1)
 
@@ -586,6 +597,15 @@ polarMap(data = dfm,
                       "OpenStreetMap", "Esri.WorldImagery"),
          popup = "estacion", key = T,
          d.icon = 300)
+```
+
+### Mapa web 2
+
+```{r}
+windroseMap(data = dfm,
+            latitude = "lat",
+            longitude = "lon",
+            paddle = F, cols = "viridis", d.icon = 300)
 ```
 
 
