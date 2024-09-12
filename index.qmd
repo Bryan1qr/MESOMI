@@ -4,7 +4,8 @@ lang: es
 format: 
   dashboard:
     orientation: columns
-    theme: custom.scss
+    theme: cosmo
+css: estilo.css
 execute: 
   message: false
   warning: false
@@ -299,7 +300,7 @@ highchart() %>%
       value = 10000,
       dashStyle = "Dash",
       label = list(text = "OMS",
-                   align = "right",
+                   align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
                                 fontWeight = "bold"))))) %>% 
@@ -721,7 +722,7 @@ highchart() %>%
       value = 10000,
       dashStyle = "Dash",
       label = list(text = "OMS",
-                   align = "right",
+                   align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
                                 fontWeight = "bold"))))) %>% 
@@ -1123,7 +1124,7 @@ highchart() %>%
       value = 10000,
       dashStyle = "Dash",
       label = list(text = "OMS",
-                   align = "right",
+                   align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
                                 fontWeight = "bold"))))) %>% 
@@ -1526,7 +1527,7 @@ highchart() %>%
       value = 10000,
       dashStyle = "Dash",
       label = list(text = "OMS",
-                   align = "right",
+                   align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
                                 fontWeight = "bold"))))) %>% 
