@@ -1,14 +1,10 @@
 ---
 title: "Calidad de aire"
-author: "MESOMI"
 lang: es
 format: 
   dashboard:
     orientation: columns
-    logo: mesomi_logo.png
-    theme:
-      light: flatly
-      dark: superhero
+    theme: custom.scss
 execute: 
   message: false
   warning: false
@@ -166,6 +162,248 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
+#### NO2
+
+```{r}
+#| title: "NO2 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, no2)
+    ), 
+    type = "line", 
+    name = "NO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+   hc_yAxis(min = 0, max = 210,  # Ajusta los límites del eje y
+           plotLines = list(
+             list(
+               color = "red",         
+               width = 2,
+               value = 200,
+               dashStyle = "Solid",
+               label = list(text = "ECA",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "red",
+                                         fontWeight = "bold"))),
+             list(
+               color = "darkgreen",         
+               width = 2,
+               value = 25,
+               dashStyle = "Solid",
+               label = list(text = "OMS",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "darkgreen",
+                                         fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### O3
+
+```{r}
+#| title: "O3"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, o3)
+    ), 
+    type = "line", 
+    name = "O3",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 120,
+           plotLines = list(
+             list(
+      color = "red",         
+      width = 2,
+      value = 100,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 100,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+
+#### CO
+
+```{r}
+#| title: "CO"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, co)
+    ), 
+    type = "line", 
+    name = "CO",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 10200,
+           plotLines = list(
+             list(
+               color = "red",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+
+#### SO2
+
+```{r}
+#| title: "SO2"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, so2)
+    ), 
+    type = "line", 
+    name = "SO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 280,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 250,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 40,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### H2S
+
+```{r}
+#| title: "H2S"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, h2s)
+    ), 
+    type = "line", 
+    name = "H2S",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 180,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 150,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
 #### Índice de Calidad de Aire
 
 ```{r}
@@ -247,6 +485,7 @@ datatable(
 ```
 
 
+
 ### EMCA - 02 {.tabset}
 #### PM10
 
@@ -281,7 +520,7 @@ highchart() %>%
       color = "darkgreen",         
       width = 2,
       value = 45,
-      dashStyle = "Solid",
+      dashStyle = "Dash",
       label = list(text = "OMS",
                    align = "right",
                    x = -10,
@@ -330,7 +569,157 @@ highchart() %>%
       color = "darkgreen",         
       width = 2,
       value = 15,
+      dashStyle = "Dashed",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+#### NO2
+
+```{r}
+#| title: "NO2 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df1$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, no2)
+    ), 
+    type = "line", 
+    name = "NO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+   hc_yAxis(min = 0, max = 210,  # Ajusta los límites del eje y
+           plotLines = list(
+             list(
+               color = "red",         
+               width = 2,
+               value = 200,
+               dashStyle = "Solid",
+               label = list(text = "ECA",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "red",
+                                         fontWeight = "bold"))),
+             list(
+               color = "darkgreen",         
+               width = 2,
+               value = 25,
+               dashStyle = "Dash",
+               label = list(text = "OMS",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "darkgreen",
+                                         fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### O3
+
+```{r}
+#| title: "PM2.5 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df1$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, o3)
+    ), 
+    type = "line", 
+    name = "O3",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 120,
+           plotLines = list(
+             list(
+      color = "red",         
+      width = 2,
+      value = 100,
       dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 100,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+
+#### CO
+
+```{r}
+#| title: "CO"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df1$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, co)
+    ), 
+    type = "line", 
+    name = "CO",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 10200,
+           plotLines = list(
+             list(
+               color = "red",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Dash",
       label = list(text = "OMS",
                    align = "right",
                    x = -10,
@@ -346,10 +735,100 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
+
+#### SO2
+
+```{r}
+#| title: "SO2"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df1$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, so2)
+    ), 
+    type = "line", 
+    name = "SO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 280,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 250,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 40,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### H2S
+
+```{r}
+#| title: "H2S"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df1$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, h2s)
+    ), 
+    type = "line", 
+    name = "H2S",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 180,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 150,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
 #### Índice de Calidad de Aire
 
 ```{r}
-
 aqi_index(df1$eca) %>%
   mutate(aqi_ind = round(aqi_ind),
          fecha = as.Date(fecha, format = "%d-%B"),
@@ -365,7 +844,6 @@ aqi_index(df1$eca) %>%
     theme_minimal()+
   theme(legend.position = "bottom",
         plot.title = element_text(hjust = 0.5)) -> aqi2
-
 
 plotly::ggplotly(aqi2) %>%
   layout(
@@ -394,7 +872,7 @@ n1 <- df1$eca %>%
 
 datatable(
   n1, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
+  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
@@ -406,6 +884,9 @@ datatable(
   ) %>% formatRound(
     columns = colnames(n1 %>% select(-Fecha)), digits = 2)
 ```
+
+
+
 
 ### EMCA - 03 {.tabset}
 #### PM10
@@ -441,7 +922,7 @@ highchart() %>%
       color = "darkgreen",         
       width = 2,
       value = 45,
-      dashStyle = "Solid",
+      dashStyle = "Dash",
       label = list(text = "OMS",
                    align = "right",
                    x = -10,
@@ -490,12 +971,253 @@ highchart() %>%
       color = "darkgreen",         
       width = 2,
       value = 15,
-      dashStyle = "Solid",
+      dashStyle = "Dash",
       label = list(text = "OMS",
                    align = "right",
                    x = -10,
                    style = list(color = "darkgreen",
                                 fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+#### NO2
+
+```{r}
+#| title: "NO2 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df2$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, no2)
+    ), 
+    type = "line", 
+    name = "NO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+   hc_yAxis(min = 0, max = 210,  # Ajusta los límites del eje y
+           plotLines = list(
+             list(
+               color = "red",         
+               width = 2,
+               value = 200,
+               dashStyle = "Solid",
+               label = list(text = "ECA",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "red",
+                                         fontWeight = "bold"))),
+             list(
+               color = "darkgreen",         
+               width = 2,
+               value = 25,
+               dashStyle = "Dash",
+               label = list(text = "OMS",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "darkgreen",
+                                         fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### O3
+
+```{r}
+#| title: "o3"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df2$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, o3)
+    ), 
+    type = "line", 
+    name = "O3",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 120,
+           plotLines = list(
+             list(
+      color = "red",         
+      width = 2,
+      value = 100,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 100,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+
+#### CO
+
+```{r}
+#| title: "CO"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df2$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, co)
+    ), 
+    type = "line", 
+    name = "CO",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 10200,
+           plotLines = list(
+             list(
+               color = "red",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+
+#### SO2
+
+```{r}
+#| title: "SO2"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df2$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, so2)
+    ), 
+    type = "line", 
+    name = "SO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 280,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 250,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 40,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### H2S
+
+```{r}
+#| title: "H2S"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df2$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, h2s)
+    ), 
+    type = "line", 
+    name = "H2S",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 180,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 150,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))))) %>% 
   hc_exporting(
     enabled = TRUE,
     buttons = list(
@@ -545,7 +1267,7 @@ plotly::ggplotly(aqi3) %>%
 #| title: "Datos diarios (ug/m3)"
 library(DT)
 
-n2 <- df2$eca %>% 
+n3 <- df2$eca %>% 
   rename_at(
       vars(names(.)),
       ~ c("Fecha", "PM2.5", "PM10", 
@@ -553,8 +1275,8 @@ n2 <- df2$eca %>%
           "CO(1h)", "CO(8h)", "O3(8h)"))
 
 datatable(
-  n2, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Instituto Vigil',
+  n3, extensions = 'Buttons',
+  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
@@ -564,8 +1286,415 @@ datatable(
         buttons = c('csv', 'excel', 'pdf'),
         text = 'Download')))
   ) %>% formatRound(
-    columns = colnames(n2 %>% select(-Fecha)), digits = 2)
+    columns = colnames(n3 %>% select(-Fecha)), digits = 2)
 ```
+
+
+
+### EMCA - 04 {.tabset}
+#### PM10
+
+```{r}
+#| title: "PM10 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df3$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm10)
+    ), 
+    type = "line", 
+    name = "PM10",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 100,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 45,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### PM2.5
+
+```{r}
+#| title: "PM2.5 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df3$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, pm25)
+    ), 
+    type = "line", 
+    name = "PM2.5",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 50,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 15,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+#### NO2
+
+```{r}
+#| title: "NO2 horario"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df3$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, no2)
+    ), 
+    type = "line", 
+    name = "NO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+   hc_yAxis(min = 0, max = 210,  # Ajusta los límites del eje y
+           plotLines = list(
+             list(
+               color = "red",         
+               width = 2,
+               value = 200,
+               dashStyle = "Solid",
+               label = list(text = "ECA",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "red",
+                                         fontWeight = "bold"))),
+             list(
+               color = "darkgreen",         
+               width = 2,
+               value = 25,
+               dashStyle = "Dash",
+               label = list(text = "OMS",
+                            align = "right",
+                            x = -10,
+                            style = list(color = "darkgreen",
+                                         fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### O3
+
+```{r}
+#| title: "o3"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df3$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, o3)
+    ), 
+    type = "line", 
+    name = "O3",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 120,
+           plotLines = list(
+             list(
+      color = "red",         
+      width = 2,
+      value = 100,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 100,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+
+#### CO
+
+```{r}
+#| title: "CO"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df3$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, co)
+    ), 
+    type = "line", 
+    name = "CO",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 10200,
+           plotLines = list(
+             list(
+               color = "red",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 10000,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+
+#### SO2
+
+```{r}
+#| title: "SO2"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df3$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, so2)
+    ), 
+    type = "line", 
+    name = "SO2",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 280,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 250,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+    list(
+      color = "darkgreen",         
+      width = 2,
+      value = 40,
+      dashStyle = "Dash",
+      label = list(text = "OMS",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "darkgreen",
+                                fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### H2S
+
+```{r}
+#| title: "H2S"
+
+highchart() %>%
+  hc_chart(zoomType = "x") %>% 
+  hc_add_series(
+    data = list_parse2(
+      df3$df %>% mutate(
+        date = as.numeric(date) * 1000) %>% 
+        select(date, h2s)
+    ), 
+    type = "line", 
+    name = "H2S",
+    color = "#6BAED6"  # Cambia la línea a color celeste
+  )  %>%
+  hc_xAxis(type = "datetime") %>% 
+  hc_yAxis(min = 0, max = 180,
+           plotLines = list(
+    list(
+      color = "red",         
+      width = 2,
+      value = 150,
+      dashStyle = "Solid",
+      label = list(text = "ECA",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))))) %>% 
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(
+      contextButton = list(
+        menuItems = c("downloadPNG",
+                      "downloadCSV",
+                      "downloadXLS",
+                      "downloadPDF"))))
+```
+
+#### Índice de Calidad de Aire
+
+```{r}
+
+aqi_index(df3$eca) %>%
+  mutate(aqi_ind = round(aqi_ind),
+         fecha = as.Date(fecha, format = "%d-%B"),
+         fecha = format(fecha, format = "%d")) %>%
+  ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
+  geom_tile(color = "white", lwd =1)+
+  geom_text(aes(label = aqi_ind)) +
+  scale_fill_manual(values = aqi) +
+  scale_y_discrete(labels = param2) +
+  labs(x = "Dias de junio", y = "",
+    title = "Índice de Calidad de Aire",
+    fill = "Categoría") +
+    theme_minimal()+
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) -> aqi4
+
+
+plotly::ggplotly(aqi4) %>%
+  layout(
+    legend = list(
+      orientation = 'h',
+      x = 0.5,
+      y = 1.07,
+      xanchor = 'center',
+      yanchor = 'top'
+    )
+  )
+```
+
+#### Tabla de datos
+
+```{r}
+#| title: "Datos diarios (ug/m3)"
+library(DT)
+
+n4 <- df2$eca %>% 
+  rename_at(
+      vars(names(.)),
+      ~ c("Fecha", "PM2.5", "PM10", 
+          "NO2", "SO2", "H2S",
+          "CO(1h)", "CO(8h)", "O3(8h)"))
+
+datatable(
+  n3, extensions = 'Buttons',
+  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
+  options = list(
+    autowidth = TRUE,
+    pageLength = 20,
+    dom = 'Bfrtip',
+    buttons = list('copy', 'print', list(
+        extend = 'collection',
+        buttons = c('csv', 'excel', 'pdf'),
+        text = 'Download')))
+  ) %>% formatRound(
+    columns = colnames(n4 %>% select(-Fecha)), digits = 2)
+```
+
+
+
+
 ### Mapa web
 
 ```{r}
@@ -596,7 +1725,18 @@ polarMap(data = dfm,
          provider = c("CartoDB.Positron",
                       "OpenStreetMap", "Esri.WorldImagery"),
          popup = "estacion", key = T,
-         d.icon = 300)
+         draw.legend = TRUE) %>% 
+    leaflet::addMarkers(label = ~ estacion,
+    labelOptions = labelOptions(noHide = FALSE, textOnly = FALSE,
+                                style = list(
+                                  "color" = "black",
+                                  "font-family" = "arial",
+                                  "font-style" = "bold",
+                                  "box-shadow" = "3px 3px rgba(0,0,0,0.15)",
+                                  "font-size" = "20px",
+                                  "border-color" = "rgba(0,0,0,0.15)"
+                                )))
+
 ```
 
 ### Mapa web 2
@@ -609,13 +1749,13 @@ windroseMap(data = dfm,
 ```
 
 
-# Descarga de datos
+<!-- # Descarga de datos -->
 
-| Descripción                             | Links de descarga          |
-|-----------------------------------------|----------------------------|
-| Datos diarios de Calidad de aire del 2023 | [eca_2024](input/eca_2024.csv)     |
-| Datos diarios de Calidad de aire del 2024 | [eca_2024](input/eca_2024.csv)     |
-| Reporte de valores diarios mensuales   | [eca_2024](input/eca_2024.csv) |
+<!-- | Descripción                             | Links de descarga          | -->
+<!-- |-----------------------------------------|----------------------------| -->
+<!-- | Datos diarios de Calidad de aire del 2023 | [eca_2024](input/eca_2024.csv)     | -->
+<!-- | Datos diarios de Calidad de aire del 2024 | [eca_2024](input/eca_2024.csv)     | -->
+<!-- | Reporte de valores diarios mensuales   | [eca_2024](input/eca_2024.csv) | -->
 
 
 <!-- confirmar los cambios en git: -->
