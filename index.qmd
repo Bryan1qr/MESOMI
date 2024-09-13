@@ -4,7 +4,9 @@ lang: es
 format: 
   dashboard:
     orientation: columns
-    theme: cosmo
+    theme: 
+      light: cosmo
+      dark: darkly
 css: estilo.css
 execute: 
   message: false
@@ -282,14 +284,24 @@ highchart() %>%
     color = "#6BAED6"  # Cambia la línea a color celeste
   )  %>%
   hc_xAxis(type = "datetime") %>% 
-  hc_yAxis(min = 0, max = 10200,
+  hc_yAxis(min = 0, max = 35200,
            plotLines = list(
              list(
                color = "red",         
       width = 2,
       value = 10000,
       dashStyle = "Solid",
-      label = list(text = "ECA",
+      label = list(text = "ECA (8h)",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+      list(
+               color = "red",         
+      width = 2,
+      value = 30000,
+      dashStyle = "Solid",
+      label = list(text = "ECA (1h)",
                    align = "right",
                    x = -10,
                    style = list(color = "red",
@@ -299,10 +311,20 @@ highchart() %>%
       width = 2,
       value = 10000,
       dashStyle = "Dash",
-      label = list(text = "OMS",
+      label = list(text = "OMS (8h)",
                    align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
+                                fontWeight = "bold"))),
+    list(
+      color = "green",         
+      width = 2,
+      value = 35000,
+      dashStyle = "Solid",
+      label = list(text = "OMS (1h)",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "green",
                                 fontWeight = "bold"))))) %>% 
   hc_exporting(
     enabled = TRUE,
@@ -704,14 +726,24 @@ highchart() %>%
     color = "#6BAED6"  # Cambia la línea a color celeste
   )  %>%
   hc_xAxis(type = "datetime") %>% 
-  hc_yAxis(min = 0, max = 10200,
+  hc_yAxis(min = 0, max = 35200,
            plotLines = list(
              list(
                color = "red",         
       width = 2,
       value = 10000,
       dashStyle = "Solid",
-      label = list(text = "ECA",
+      label = list(text = "ECA (8h)",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+      list(
+               color = "red",         
+      width = 2,
+      value = 30000,
+      dashStyle = "Solid",
+      label = list(text = "ECA (1h)",
                    align = "right",
                    x = -10,
                    style = list(color = "red",
@@ -721,10 +753,20 @@ highchart() %>%
       width = 2,
       value = 10000,
       dashStyle = "Dash",
-      label = list(text = "OMS",
+      label = list(text = "OMS (8h)",
                    align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
+                                fontWeight = "bold"))),
+    list(
+      color = "green",         
+      width = 2,
+      value = 35000,
+      dashStyle = "Solid",
+      label = list(text = "OMS (1h)",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "green",
                                 fontWeight = "bold"))))) %>% 
   hc_exporting(
     enabled = TRUE,
@@ -1106,14 +1148,24 @@ highchart() %>%
     color = "#6BAED6"  # Cambia la línea a color celeste
   )  %>%
   hc_xAxis(type = "datetime") %>% 
-  hc_yAxis(min = 0, max = 10200,
+  hc_yAxis(min = 0, max = 35200,
            plotLines = list(
              list(
                color = "red",         
       width = 2,
       value = 10000,
       dashStyle = "Solid",
-      label = list(text = "ECA",
+      label = list(text = "ECA (8h)",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+      list(
+               color = "red",         
+      width = 2,
+      value = 30000,
+      dashStyle = "Solid",
+      label = list(text = "ECA (1h)",
                    align = "right",
                    x = -10,
                    style = list(color = "red",
@@ -1123,10 +1175,20 @@ highchart() %>%
       width = 2,
       value = 10000,
       dashStyle = "Dash",
-      label = list(text = "OMS",
+      label = list(text = "OMS (8h)",
                    align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
+                                fontWeight = "bold"))),
+    list(
+      color = "green",         
+      width = 2,
+      value = 35000,
+      dashStyle = "Solid",
+      label = list(text = "OMS (1h)",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "green",
                                 fontWeight = "bold"))))) %>% 
   hc_exporting(
     enabled = TRUE,
@@ -1509,14 +1571,24 @@ highchart() %>%
     color = "#6BAED6"  # Cambia la línea a color celeste
   )  %>%
   hc_xAxis(type = "datetime") %>% 
-  hc_yAxis(min = 0, max = 10200,
+  hc_yAxis(min = 0, max = 35200,
            plotLines = list(
              list(
                color = "red",         
       width = 2,
       value = 10000,
       dashStyle = "Solid",
-      label = list(text = "ECA",
+      label = list(text = "ECA (8h)",
+                   align = "right",
+                   x = -10,
+                   style = list(color = "red",
+                        fontWeight = "bold"))),
+      list(
+               color = "red",         
+      width = 2,
+      value = 30000,
+      dashStyle = "Solid",
+      label = list(text = "ECA (1h)",
                    align = "right",
                    x = -10,
                    style = list(color = "red",
@@ -1526,10 +1598,20 @@ highchart() %>%
       width = 2,
       value = 10000,
       dashStyle = "Dash",
-      label = list(text = "OMS",
+      label = list(text = "OMS (8h)",
                    align = "left",
                    x = -10,
                    style = list(color = "darkgreen",
+                                fontWeight = "bold"))),
+    list(
+      color = "green",         
+      width = 2,
+      value = 35000,
+      dashStyle = "Solid",
+      label = list(text = "OMS (1h)",
+                   align = "left",
+                   x = -10,
+                   style = list(color = "green",
                                 fontWeight = "bold"))))) %>% 
   hc_exporting(
     enabled = TRUE,

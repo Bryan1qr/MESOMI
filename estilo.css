@@ -6,6 +6,7 @@ body {
 
 .nav-tabs .nav-link {
   color: #4d4d4d !important;
+  font-weight: 400;
 }
 
 .nav-tabs .nav-link.active {
@@ -13,7 +14,8 @@ body {
 }
 
 .nav-tabs .nav-link:hover {
-  background-color: #28a745; /* Cambia el color de fondo a verde */
+  background-color: #419510; /* Cambia el color de fondo a verde */
   color: white !important; /* Cambia el color del texto a blanco */
-  border-color: #28a745; /* Cambia el color del borde a verde */
+  border-color: #419510; /* Cambia el color del borde a verde */
+  
 }
