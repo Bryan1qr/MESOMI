@@ -66,7 +66,7 @@ df3 <- ECA(meteo = "input/CR1000_AGOSTO_UNJBG_2024.csv",
 ```
 
 # Datos del 2024
-## Mapa web 2 {.tabset width=30%}
+## Mapa web 2 {.tabset width=70%}
 
 ```{r}
 #| title: "Rosas de viento"
@@ -86,15 +86,29 @@ dfm <- rbind(dfm, dfm1, dfm2, dfm3)
 dfm$co <- NULL
 dfm <- dfm %>% mutate(co = co_1) %>% select(-co_1)
 
+
+
 windroseMap(data = dfm,
             latitude = "lat",
             longitude = "lon",
             paddle = F, cols = "viridis",
-            d.icon = 300, popup = "estacion")
+            d.icon = 300, popup = "estacion",
+            provider = c("CartoDB.Positron",
+                      "OpenStreetMap", "Esri.WorldImagery")) %>% 
+  leaflet::addMarkers(label = ~ estacion,
+    labelOptions = labelOptions(noHide = FALSE, textOnly = FALSE,
+                                style = list(
+                                  "color" = "black",
+                                  "font-family" = "arial",
+                                  "font-style" = "bold",
+                                  "box-shadow" = "3px 3px rgba(0,0,0,0.15)",
+                                  "font-size" = "20px",
+                                  "border-color" = "rgba(0,0,0,0.15)"
+                                )))
+
 ```
 
 ```{r}
-#| padding: 0px
 #| title: "Gráficos polares"
 polarMap(data = dfm,
          pollutant = c("pm10", "pm25", "no2",
@@ -117,7 +131,6 @@ polarMap(data = dfm,
                                   "font-size" = "20px",
                                   "border-color" = "rgba(0,0,0,0.15)"
                                 )))
-
 ```
 
 ## column {.tabset width=70%}
