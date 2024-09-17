@@ -27,6 +27,7 @@ library(patchwork)
 library(ggrepel)
 library(openairmaps)
 library(leaflet)
+library(leaflet.extras)
 library(plotly)
 library(highcharter)
 source("Scripts/ECA.R")
@@ -104,7 +105,16 @@ windroseMap(data = dfm,
                                   "box-shadow" = "3px 3px rgba(0,0,0,0.15)",
                                   "font-size" = "20px",
                                   "border-color" = "rgba(0,0,0,0.15)"
-                                )))
+                                ))) %>% 
+  addMeasure(primaryLengthUnit = "meters",
+             primaryAreaUnit = "sqmeters") %>%  # Herramienta para medir distancias y áreas
+  addDrawToolbar(
+    targetGroup = "drawnItems",  # Agrupar los elementos dibujados
+    editOptions = editToolbarOptions(
+      selectedPathOptions = selectedPathOptions())) %>% 
+  addSearchOSM() %>%  # Caja de búsqueda
+  addMiniMap() %>%  # Mapa en miniatura
+  addFullscreenControl()
 
 ```
 
