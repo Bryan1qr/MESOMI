@@ -140,7 +140,8 @@ polarMap(data = dfm,
                                   "box-shadow" = "3px 3px rgba(0,0,0,0.15)",
                                   "font-size" = "20px",
                                   "border-color" = "rgba(0,0,0,0.15)"
-                                )))
+                                ))) %>% 
+  addFullscreenControl()
 ```
 
 ## column {.tabset width=70%}
