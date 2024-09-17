@@ -116,11 +116,11 @@ polarMap(data = dfm,
          latitude = "lat",
          longitude = "lon",
          alpha = 0.85, cols = "jet",
-         label = "estacion", collapse.control = T,
+         label = "estacion",
          provider = c("CartoDB.Positron",
                       "OpenStreetMap", "Esri.WorldImagery"),
          popup = "estacion", key = T,
-         draw.legend = TRUE) %>% 
+         draw.legend = FALSE, control.collapsed = TRUE) %>% 
     leaflet::addMarkers(label = ~ estacion,
     labelOptions = labelOptions(noHide = FALSE, textOnly = FALSE,
                                 style = list(
