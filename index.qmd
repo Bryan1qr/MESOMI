@@ -527,7 +527,6 @@ aqi_index(df$eca) %>%
   scale_fill_manual(values = aqi) +
   scale_y_discrete(labels = param2) +
   labs(x = "Dias de junio", y = "",
-    title = "Índice de Calidad de Aire",
     fill = "Categoría") +
     theme_minimal()+
   theme(legend.position = "bottom",
@@ -949,8 +948,7 @@ aqi_index(df1$eca) %>%
   scale_fill_manual(values = aqi) +
   scale_y_discrete(labels = param2) +
   labs(x = "Dias de junio", y = "",
-    title = "Índice de Calidad de Aire",
-    fill = "Categoría") +
+       fill = "Categoría") +
     theme_minimal()+
   theme(legend.position = "bottom",
         plot.title = element_text(hjust = 0.5)) -> aqi2
@@ -1372,7 +1370,6 @@ aqi_index(df2$eca) %>%
   scale_fill_manual(values = aqi) +
   scale_y_discrete(labels = param2) +
   labs(x = "Dias de junio", y = "",
-    title = "Índice de Calidad de Aire",
     fill = "Categoría") +
     theme_minimal()+
   theme(legend.position = "bottom",
@@ -1795,7 +1792,6 @@ aqi_index(df3$eca) %>%
   scale_fill_manual(values = aqi) +
   scale_y_discrete(labels = param2) +
   labs(x = "Dias de junio", y = "",
-    title = "Índice de Calidad de Aire",
     fill = "Categoría") +
     theme_minimal()+
   theme(legend.position = "bottom",
