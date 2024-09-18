@@ -1,6 +1,7 @@
 ---
 title: "Calidad de aire"
 lang: es
+layout: article
 format: 
   dashboard:
     orientation: columns
