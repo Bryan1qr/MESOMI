@@ -1827,7 +1827,7 @@ plotly::ggplotly(aqi4) %>%
 #| title: "Datos diarios (ug/m3)"
 library(DT)
 
-n4 <- df2$eca %>% 
+n4 <- df3$eca %>% 
   rename_at(
       vars(names(.)),
       ~ c("Fecha", "PM2.5", "PM10", 
@@ -1835,7 +1835,7 @@ n4 <- df2$eca %>%
           "CO(1h)", "CO(8h)", "O3(8h)"))
 
 datatable(
-  n3, extensions = 'Buttons',
+  n4, extensions = 'Buttons',
   caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
