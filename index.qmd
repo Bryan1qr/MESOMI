@@ -1,7 +1,8 @@
 ---
-title: "Calidad de aire"
+title: "**Calidad de aire**"
 lang: es
-layout: article
+layout: full
+mainfont: "Roboto Sans Serif"
 format: 
   dashboard:
     orientation: columns
@@ -66,8 +67,7 @@ df3 <- ECA(meteo = "input/CR1000_AGOSTO_UNJBG_2024.csv",
            estacion = "epsg_unjbg",
            tipo = "lista")
 ```
-
-# Datos del 2024
+# **Datos del 2024**
 ## Mapa web 2 {.tabset width=70%}
 
 ```{r}
@@ -1850,8 +1850,8 @@ datatable(
     columns = colnames(n4 %>% select(-Fecha)), digits = 2)
 ```
 
-
-
+# Datos del 2025
+Estamos trabajando en eso...
 
 <!-- # Descarga de datos -->
 
