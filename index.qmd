@@ -88,15 +88,19 @@ dfm <- rbind(dfm, dfm1, dfm2, dfm3)
 dfm$co <- NULL
 dfm <- dfm %>% mutate(co = co_1) %>% select(-co_1)
 
-
+color <- RColorBrewer::brewer.pal(7, "Set1")
 
 windroseMap(data = dfm,
             latitude = "lat",
             longitude = "lon",
-            paddle = F, cols = "viridis",
+            col = color,
+            paddle = F,
             d.icon = 300, popup = "estacion",
+            breaks = c(0,0.2,0.3,1.5, 1.6, 3.3, 3.4, 5.4),
             provider = c("CartoDB.Positron",
-                      "OpenStreetMap", "Esri.WorldImagery")) %>% 
+                      "OpenStreetMap", "Esri.WorldImagery"),
+            legend.title = "Velocidad\ndel viento (m/s)",
+            control.collapsed = TRUE) %>% 
   leaflet::addMarkers(label = ~ estacion,
     labelOptions = labelOptions(noHide = FALSE, textOnly = FALSE,
                                 style = list(
@@ -109,12 +113,8 @@ windroseMap(data = dfm,
                                 ))) %>% 
   addMeasure(primaryLengthUnit = "meters",
              primaryAreaUnit = "sqmeters") %>%  # Herramienta para medir distancias y áreas
-  addDrawToolbar(
-    targetGroup = "drawnItems",  # Agrupar los elementos dibujados
-    editOptions = editToolbarOptions(
-      selectedPathOptions = selectedPathOptions())) %>% 
   addSearchOSM() %>%  # Caja de búsqueda
-  addMiniMap() %>%  # Mapa en miniatura
+  addMiniMap(minimized = TRUE) %>%  # Mapa en miniatura
   addFullscreenControl()
 
 ```
@@ -142,6 +142,10 @@ polarMap(data = dfm,
                                   "font-size" = "20px",
                                   "border-color" = "rgba(0,0,0,0.15)"
                                 ))) %>% 
+    addDrawToolbar(
+    targetGroup = "drawnItems",  # Agrupar los elementos dibujados
+    editOptions = editToolbarOptions(
+      selectedPathOptions = selectedPathOptions())) %>% 
   addFullscreenControl()
 ```
 
@@ -244,6 +248,7 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
+
 #### NO2
 
 ```{r}
