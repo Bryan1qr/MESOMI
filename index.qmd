@@ -577,17 +577,28 @@ n <- df$eca %>%
 
 datatable(
   n, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
     dom = 'Bfrtip',
-    buttons = list('copy', 'print', list(
+    buttons = list(
+      'copy', 'print', 
+      list(
         extend = 'collection',
         buttons = c('csv', 'excel', 'pdf'),
-        text = 'Download')))
-  ) %>% formatRound(
-    columns = colnames(n %>% select(-Fecha)), digits = 2)
+        text = 'Download'
+      )
+    ),
+    # Añadiendo estilos CSS
+    initComplete = JS("function(settings, json) {",
+                      "$(this.api().table().header()).css({'font-size': '0.7rem'});",
+                      "$(this.api().rows().nodes()).css({'font-size': '0.7rem'});", # Estilo para el cuerpo
+                      "$('.dt-button').css({'padding': '1px 2px'});", # Ajusta el padding como desees
+                      "}")
+  )
+) %>% formatRound(
+  columns = colnames(n %>% select(-Fecha)), digits = 2
+)
 ```
 
 
@@ -997,17 +1008,28 @@ n1 <- df1$eca %>%
 
 datatable(
   n1, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
     dom = 'Bfrtip',
-    buttons = list('copy', 'print', list(
+    buttons = list(
+      'copy', 'print', 
+      list(
         extend = 'collection',
         buttons = c('csv', 'excel', 'pdf'),
-        text = 'Download')))
-  ) %>% formatRound(
-    columns = colnames(n1 %>% select(-Fecha)), digits = 2)
+        text = 'Download'
+      )
+    ),
+    # Añadiendo estilos CSS
+    initComplete = JS("function(settings, json) {",
+                      "$(this.api().table().header()).css({'font-size': '0.7rem'});",
+                      "$(this.api().rows().nodes()).css({'font-size': '0.7rem'});", # Estilo para el cuerpo
+                      "$('.dt-button').css({'padding': '1px 2px'});", # Ajusta el padding como desees
+                      "}")
+  )
+) %>% formatRound(
+  columns = colnames(n %>% select(-Fecha)), digits = 2
+)
 ```
 
 
@@ -1420,17 +1442,28 @@ n3 <- df2$eca %>%
 
 datatable(
   n3, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
     dom = 'Bfrtip',
-    buttons = list('copy', 'print', list(
+    buttons = list(
+      'copy', 'print', 
+      list(
         extend = 'collection',
         buttons = c('csv', 'excel', 'pdf'),
-        text = 'Download')))
-  ) %>% formatRound(
-    columns = colnames(n3 %>% select(-Fecha)), digits = 2)
+        text = 'Download'
+      )
+    ),
+    # Añadiendo estilos CSS
+    initComplete = JS("function(settings, json) {",
+                      "$(this.api().table().header()).css({'font-size': '0.7rem'});",
+                      "$(this.api().rows().nodes()).css({'font-size': '0.7rem'});", # Estilo para el cuerpo
+                      "$('.dt-button').css({'padding': '1px 2px'});", # Ajusta el padding como desees
+                      "}")
+  )
+) %>% formatRound(
+  columns = colnames(n %>% select(-Fecha)), digits = 2
+)
 ```
 
 
@@ -1842,17 +1875,28 @@ n4 <- df3$eca %>%
 
 datatable(
   n4, extensions = 'Buttons',
-  caption = 'Tabla 1: Datos horarios - Hipólito Unanue',
   options = list(
     autowidth = TRUE,
     pageLength = 20,
     dom = 'Bfrtip',
-    buttons = list('copy', 'print', list(
+    buttons = list(
+      'copy', 'print', 
+      list(
         extend = 'collection',
         buttons = c('csv', 'excel', 'pdf'),
-        text = 'Download')))
-  ) %>% formatRound(
-    columns = colnames(n4 %>% select(-Fecha)), digits = 2)
+        text = 'Download'
+      )
+    ),
+    # Añadiendo estilos CSS
+    initComplete = JS("function(settings, json) {",
+                      "$(this.api().table().header()).css({'font-size': '0.7rem'});",
+                      "$(this.api().rows().nodes()).css({'font-size': '0.7rem'});", # Estilo para el cuerpo
+                      "$('.dt-button').css({'padding': '1px 2px'});", # Ajusta el padding como desees
+                      "}")
+  )
+) %>% formatRound(
+  columns = colnames(n %>% select(-Fecha)), digits = 2
+)
 ```
 
 # Datos del 2025
