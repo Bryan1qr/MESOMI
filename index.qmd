@@ -88,18 +88,17 @@ dfm <- rbind(dfm, dfm1, dfm2, dfm3)
 dfm$co <- NULL
 dfm <- dfm %>% mutate(co = co_1) %>% select(-co_1)
 
-coloreo <- c("#D95F02","yellow","#A6DBA0","#008837","#2171B5","#7B3294","#E7298A")
-
 windroseMap(data = dfm,
             latitude = "lat",
             longitude = "lon",
-            col = coloreo,
             paddle = F,
             d.icon = 300, popup = "estacion",
-            breaks = c(0,0.2,0.3,1.5, 1.6, 3.3, 3.4, 5.4),
+            breaks = c(0,0.2,1.5,3.3,5.4),
+            include.lowest = FALSE,
+            cols = "viridis",
             provider = c("CartoDB.Positron",
                       "OpenStreetMap", "Esri.WorldImagery"),
-            legend.title = "Velocidad\ndel viento (m/s)",
+            legend.title = "Velocidad<br>del viento (m/s)",
             control.collapsed = TRUE, legend) %>% 
   leaflet::addMarkers(label = ~ estacion,
     labelOptions = labelOptions(noHide = FALSE, textOnly = FALSE,
@@ -116,7 +115,6 @@ windroseMap(data = dfm,
   addSearchOSM() %>%  # Caja de búsqueda
   addMiniMap(minimized = TRUE) %>%  # Mapa en miniatura
   addFullscreenControl()
-
 ```
 
 ```{r}
