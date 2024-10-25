@@ -327,7 +327,7 @@ leaflet() %>%
 ```
 
 ```{r}
-#| title: "REPORTES DE MONITOREO DE CALIDAD DE AIRE"
+#| title: "REPORTES DE MONITOREO"
 library(gt)
 
 
@@ -357,7 +357,7 @@ data %>%
     columns = 3, as_button = FALSE,label = c(
       "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
       "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF")) %>%
-  tab_caption(caption = "La Siguiente tabla contiene los reportes correspondientes a cada punto de monitoreo evaluado en el año 2024, puedes visualizar cada reporte haciendo clic en el botón azul para abrir el PDF.") %>% 
+  tab_caption(caption = "La Siguiente tabla contiene los reportes correspondientes a cada punto de monitoreo evaluado en el año 2024.") %>% 
   tab_style(
     style = list(
       cell_text(weight = "bold", size = px(12), align = "center")
