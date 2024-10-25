@@ -8,7 +8,6 @@ format:
     orientation: columns
     theme: 
       light: cosmo
-      dark: darkly
 css: estilo.css
 filters:
   - shinylive
@@ -249,11 +248,7 @@ data %>%
       columns = everything(),
       rows = Categoria == "Peligrosa"
     )
-  ) %>% 
-  tab_caption(caption = "Una manera muy útil de medir la calidad de aire de diferentes zonas del país era utilizando el Índice de Calidad de Aire
-del Perú, sin embargo, este instrumento técnico se encuentra desactualizado respecto a la normativa vigente. Por lo cual
-aquí se viene utilizando el Índice de Calidad de Aire (AQI por sus siglas en inglés) de la Agencia de Protección Ambiental
-de los Estados Unidos (US-EPA, 2024), cuya simbología se aprecia en la tabla")
+  ) %>% tab_footnote("Esta tabla sirve para saber que Calidad de Aire tiene tu distrito. Lo mismo se ve en el mapa.")
 ```
 
 ```{r}
@@ -331,8 +326,8 @@ leaflet() %>%
   addFullscreenControl()
 ```
 
-
 ```{r}
+#| title: "REPORTES DE MONITOREO DE CALIDAD DE AIRE"
 library(gt)
 
 
@@ -343,10 +338,10 @@ data <- data.frame(
     "Tacna", "Alto de la Alianza", "Ciudad Nueva", "Tacna",
     "Coronel Gregorio Albarracín Lanchipa", "Tacna"
   ),
-  Referencia = c("Prolongación Hipólito Unanue 1269, Ex sede Gore-Tacna",
-                 "IESTP Francisco de Paula Gonzáles Vigil",
-                 "I.E. Manuel A. Odría", "Escuela de Posgrado UNJBG",
-                 "I.E. Jorge Chávez", "Universidad Nacional Jorge Basadre Grohmann"),
+  # Referencia = c("Prolongación Hipólito Unanue 1269, Ex sede Gore-Tacna",
+  #                "IESTP Francisco de Paula Gonzáles Vigil",
+  #                "I.E. Manuel A. Odría", "Escuela de Posgrado UNJBG",
+  #                "I.E. Jorge Chávez", "Universidad Nacional Jorge Basadre Grohmann"),
   Botón = c("INFORMES TERMINADOS/EMCA-01_o.pdf", "INFORMES TERMINADOS/EMCA-02_o.pdf",
             "INFORMES TERMINADOS/EMCA-03_o.pdf", "INFORMES TERMINADOS/EMCA-04_o.pdf",
             "INFORMES TERMINADOS/EMCA-05_o.pdf", "INFORMES TERMINADOS/EMCA-06_o.pdf")
@@ -357,23 +352,29 @@ data %>%
   cols_label(
     Etiqueta = "Reporte",
     Botón = "Documento",
-    Distrito = "Distrito",
-    Referencia = "Referencia") %>%
+    Distrito = "Distrito") %>%
   fmt_url(
-    columns = 4, as_button = FALSE,label = c(
+    columns = 3, as_button = FALSE,label = c(
       "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
-      "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF")) %>% 
-  tab_caption(caption = "La Siguiente tabla contiene los reportes generados correspondientes a cada punto de monitoreo evaluado en el año 2024, puedes visualizar cada reporte haciendo clic en el botón azul para abrir el PDF.")
+      "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF")) %>%
+  tab_caption(caption = "La Siguiente tabla contiene los reportes correspondientes a cada punto de monitoreo evaluado en el año 2024, puedes visualizar cada reporte haciendo clic en el botón azul para abrir el PDF.") %>% 
+  tab_style(
+    style = list(
+      cell_text(weight = "bold", size = px(12), align = "center")
+    ), locations = cells_body())
 
 ```
 
+
 # **Datos del 2024**
 
-## {.sidebar width=20%}
+##  {.sidebar width="20%"}
+
 ### Presentación
+
 Aquí te presentamos los datos de calidad de aire que viene registrando el Gobierno Regional de Tacna a través de su Estación de Monitoreo de Calidad de Aire.
 
-## Mapa web 2 {.tabset width=60%}
+## Mapa web 2 {.tabset width="60%"}
 
 ```{r}
 #| title: "Rosas de viento"
@@ -440,8 +441,10 @@ polarMap(data = dfm,
   
 ```
 
-## column {.tabset width=70%}
+## column {.tabset width="70%"}
+
 ### EMCA - 01 {.tabset}
+
 #### PM10
 
 ```{r}
@@ -640,7 +643,6 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
-
 #### CO
 
 ```{r}
@@ -710,7 +712,6 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
-
 
 #### SO2
 
@@ -889,9 +890,8 @@ datatable(
 )
 ```
 
-
-
 ### EMCA - 02 {.tabset}
+
 #### PM10
 
 ```{r}
@@ -989,6 +989,7 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
+
 #### NO2
 
 ```{r}
@@ -1089,7 +1090,6 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
-
 #### CO
 
 ```{r}
@@ -1159,7 +1159,6 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
-
 
 #### SO2
 
@@ -1317,10 +1316,8 @@ datatable(
 )
 ```
 
-
-
-
 ### EMCA - 03 {.tabset}
+
 #### PM10
 
 ```{r}
@@ -1418,6 +1415,7 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
+
 #### NO2
 
 ```{r}
@@ -1518,7 +1516,6 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
-
 #### CO
 
 ```{r}
@@ -1588,7 +1585,6 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
-
 
 #### SO2
 
@@ -1748,9 +1744,8 @@ datatable(
 )
 ```
 
-
-
 ### EMCA - 04 {.tabset}
+
 #### PM10
 
 ```{r}
@@ -1848,6 +1843,7 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
+
 #### NO2
 
 ```{r}
@@ -1948,7 +1944,6 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
-
 #### CO
 
 ```{r}
@@ -2018,7 +2013,6 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
-
 
 #### SO2
 
@@ -2178,9 +2172,8 @@ datatable(
 )
 ```
 
-
-
 ### EMCA - 05 {.tabset}
+
 #### PM10
 
 ```{r}
@@ -2278,6 +2271,7 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
+
 #### NO2
 
 ```{r}
@@ -2378,7 +2372,6 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
-
 #### CO
 
 ```{r}
@@ -2448,7 +2441,6 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
-
 
 #### SO2
 
@@ -2608,13 +2600,8 @@ datatable(
 )
 ```
 
-
-
-
-
-
-
 ### EMCA - 06 {.tabset}
+
 #### PM10
 
 ```{r}
@@ -2712,6 +2699,7 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
+
 #### NO2
 
 ```{r}
@@ -2812,7 +2800,6 @@ highchart() %>%
                       "downloadPDF"))))
 ```
 
-
 #### CO
 
 ```{r}
@@ -2882,7 +2869,6 @@ highchart() %>%
                       "downloadXLS",
                       "downloadPDF"))))
 ```
-
 
 #### SO2
 
@@ -3042,9 +3028,7 @@ datatable(
 )
 ```
 
-
 # Beta
-
 
 ```{r}
 library(gt)
