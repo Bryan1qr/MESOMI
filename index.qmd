@@ -10,12 +10,16 @@ format:
       light: cosmo
       dark: darkly
 css: estilo.css
+filters:
+  - shinylive
 execute: 
   message: false
   warning: false
 editor_options: 
   chunk_output_type: console
 ---
+
+# Presentación {orientation="rows"}
 
 ```{r}
 #| include: false
@@ -32,6 +36,7 @@ library(leaflet)
 library(leaflet.extras)
 library(plotly)
 library(highcharter)
+library(magick)
 source("Scripts/ECA.R")
 
 # Cargando datos del punto de hipólito unanue:
@@ -83,17 +88,7 @@ df5 <- ECA(meteo = "input/CR1000_OCTUBRE_2024.csv",
           fecha_fin = "2024-10-08",
           estacion = "unjbg2",
           tipo = "lista")
-```
-# **Datos del 2024**
 
-## {.sidebar width=20%}
-### Presentación
-Aquí te presentamos los datos de calidad de aire que viene registrando el Gobierno Regional de Tacna a través de su Estación de Monitoreo de Calidad de Aire.
-
-## Mapa web 2 {.tabset width=60%}
-
-```{r}
-#| title: "Rosas de viento"
 dfm <- df$df %>% mutate(lat = -18.004275, lon = -70.257304,
                         estacion = "EMCA - 01",
                         XD = "Prolongación Hipólito Unanue")
@@ -122,6 +117,244 @@ dfm <- rbind(dfm, dfm1, dfm2, dfm3, dfm4, dfm5)
 dfm$co <- NULL
 dfm <- dfm %>% mutate(co = co_1) %>% select(-co_1)
 
+```
+
+## Quarto {orientation="Columns"}
+
+```{r}
+#| component: valuebox
+#| title: Horas de monitoreo
+list(
+  icon = "pencil-square",
+  color = "primary",
+  value = length(unique(dfm$estacion))
+)
+```
+
+```{r}
+#| component: valuebox
+#| title: Horas de monitoreo
+
+list(
+  icon = "stopwatch",
+  color = "secondary",
+  value = length(dfm$date)
+)
+```
+
+```{r}
+#| component: valuebox
+#| title: Días monitoreados
+
+list(
+  icon = "stopwatch-fill",
+  color = "light",
+  value = length(dfm$date)/24
+)
+```
+
+## Quarto {orientation="Columns"}
+
+```{r}
+# Instala y carga el paquete gt si no lo tienes
+# install.packages("gt")
+library(gt)
+
+# Datos de la tabla
+data <- data.frame(
+  Categoria = c("Buena", "Moderada", "Insalubre para grupos sensibles", 
+                "Insalubre", "Muy Insalubre", "Peligrosa"),
+  Rango_AQI = c("0 a 50", "51 a 100", "101 a 150", "151 a 200", 
+                "201 a 300", "301 a 500"),
+  Color = c("Verde", "Amarillo", "Naranja", "Rojo", "Púrpura", "Marrón"),
+  Significado = c("La calidad del aire se considera satisfactoria y la contaminación atmosférica presenta un riesgo escaso o nulo.",
+                  "La calidad del aire es aceptable pero para algunos contaminantes podría existir una preocupación moderada para la salud de un grupo muy pequeño de personas excepcionalmente sensibles a la contaminación ambiental.",
+                  "Los miembros de grupos sensibles pueden padecer efectos en la salud. Probablemente no afectará a las personas en general.",
+                  "Todos pueden comenzar a padecer efectos en la salud y los miembros de grupos sensibles pueden padecer efectos más graves.",
+                  "Advertencias sanitarias de condiciones de emergencia. Son mayores las probabilidades de que toda la población esté afectada.",
+                  "Alerta sanitaria: todos pueden padecer efectos sanitarios más graves."))
+
+# Crear la tabla con gt
+data %>%
+  gt() %>%
+  tab_header(
+    title = "Índice de Calidad de Aire"
+  ) %>%
+  cols_label(
+    Categoria = "Categoría",
+    Rango_AQI = "Rango AQI",
+    Color = "Color",
+    Significado = "Significado"
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold", size = px(12), align = "center", v_align = "middle")  # Negrita, tamaño y centrado
+    ),
+    locations = cells_column_labels(c(Categoria, Rango_AQI, Color, Significado))  # Especifica las columnas
+  ) %>%
+  tab_style(style = list(cell_fill(color = rgb(158, 255, 145, maxColorValue = 255)),
+                         cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Buena"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(255, 201, 5, maxColorValue = 255)),
+      cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Moderada"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(255, 130, 5, maxColorValue = 255)),
+      cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Insalubre para grupos sensibles"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(240, 34, 0, maxColorValue = 255)),
+      cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Insalubre"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(137, 9, 151, maxColorValue = 255)),
+      cell_text(color = "white", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Muy Insalubre"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color =rgb(100, 0, 21, maxColorValue = 255)),
+      cell_text(color = "white", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Peligrosa"
+    )
+  ) %>% 
+  tab_caption(caption = "Una manera muy útil de medir la calidad de aire de diferentes zonas del país era utilizando el Índice de Calidad de Aire
+del Perú, sin embargo, este instrumento técnico se encuentra desactualizado respecto a la normativa vigente. Por lo cual
+aquí se viene utilizando el Índice de Calidad de Aire (AQI por sus siglas en inglés) de la Agencia de Protección Ambiental
+de los Estados Unidos (US-EPA, 2024), cuya simbología se aprecia en la tabla")
+```
+
+```{r}
+source("Scripts/AQI.R")
+aqqi <- function(db){
+  aqi_index(db) %>%
+    group_by(fecha) %>% 
+    summarize(ind = max(aqi_ind)) %>%
+    summarize(ind = max(ind)) %>% pull()
+}
+
+placexd <- data.frame(AQI = c(
+  aqqi(df$eca), aqqi(df1$eca),
+  aqqi(df2$eca), aqqi(df3$eca),
+  aqqi(df4$eca), aqqi(df5$eca)),
+  estación = paste0("EMCA-0", seq(1:6)),
+  lat = c(-18.004275, -17.993250, -17.980364, -18.00676,
+          -18.03961, -18.02685),
+  lon = c(-70.257304, -70.243305, -70.239032, -70.23816,
+          -70.25581, -70.2507),
+  lugar = c("Prolongación Hipólito Unanue 1269",
+            "IESTP Francisco de Paula Gonzales Vigil",
+            "I.E. Manuel A. Odría",
+            "Escuela de Posgrado UNJBG",
+            "I.E. Jorge Chávez",
+            "Universidad Nacional Jorge Basadre Grohmann"))
+
+
+create_icon <- function(valor) {
+  # Crear una imagen en blanco
+  img <- image_blank(width = 50, height = 50, color = "#ffc905") %>%
+    # Agregar el texto (el valor numérico)
+    image_annotate(text = as.character(valor), size = 20, color = "black", location = "+15+15") 
+  return(img)
+}
+
+# Crear una lista de íconos para cada valor
+placexd$icon <- lapply(placexd$AQI, create_icon)
+
+icon_paths <- sapply(placexd$icon, function(icon) {
+  path <- tempfile(fileext = ".png")
+  image_write(icon, path = path)
+  return(path)
+})
+
+
+leaflet() %>% 
+  addProviderTiles(
+    providers$OpenStreetMap
+  ) %>% 
+  addMarkers(data = placexd, lng = ~lon, lat = ~lat,
+             icon = ~icons(iconUrl = icon_paths, iconWidth = 35, iconHeight = 35),
+             popup = ~paste0(
+               "<center><b>",estación,
+               "<br/></b><center>", lugar,
+               "<br/><b>Latitud:</b> ", lat,
+               "<br/><b>Longitud:</b> ", lon,
+               "<br/><b>Calidad de Aire:</b> ",  
+               "<b><font style='color:rgb(255,201,5)'>MODERADA</font></b>")) %>% 
+  addCircleMarkers(data = placexd, lat = ~lat,
+                   lng = ~lon,
+                   radius = 25,
+                   fillColor =  "#ffc905",
+                   color = "#ffc905",  # Ajusta la opacidad del relleno aquí
+                   fillOpacity = 1, opacity = 1) %>% 
+  addControl("<div style='background-color: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px;'>
+                   <strong><span style='color: black;'>Calidad de aire:</span></strong><br>
+                   <span style='color: rgba(255, 201, 5,1);'>● Moderada</span><br>
+                 </div>", 
+             position = "bottomright", 
+             className = "info-control") %>% 
+  addMeasure(primaryLengthUnit = "meters",
+             primaryAreaUnit = "sqmeters") %>%  
+  addSearchOSM() %>% 
+  addFullscreenControl()
+```
+
+```{r}
+a <- dfm %>% 
+  select(c(date, estacion, pm25, pm10, no2, so2, h2s, o3)) %>% 
+  pivot_longer(cols = -(1:2)) %>% 
+  reframe(value = mean(value, na.rm = TRUE), .by = c(estacion, name)) %>% 
+  ggplot(aes(x = estacion, y = value, fill = name)) +
+  geom_bar(stat = "identity") + 
+  facet_grid(name~., scales = "free_y") + theme_bw() +
+  theme(legend.position = "none") +
+  scale_fill_brewer(palette = "Set3")
+
+plotly::ggplotly(a)
+```
+
+# **Datos del 2024**
+
+## {.sidebar width=20%}
+### Presentación
+Aquí te presentamos los datos de calidad de aire que viene registrando el Gobierno Regional de Tacna a través de su Estación de Monitoreo de Calidad de Aire.
+
+## Mapa web 2 {.tabset width=60%}
+
+```{r}
+#| title: "Rosas de viento"
 windroseMap(data = dfm,
             latitude = "lat",
             longitude = "lon",
@@ -2788,35 +3021,150 @@ datatable(
 ```
 
 
+# Beta
+
+
+```{r}
+library(gt)
+
+# Datos de la tabla
+data <- data.frame(
+  Categoria = c("Buena", "Moderada", "Insalubre para grupos sensibles", 
+                "Insalubre", "Muy Insalubre", "Peligrosa"),
+  Rango_AQI = c("0 a 50", "51 a 100", "101 a 150", "151 a 200", 
+                "201 a 300", "301 a 500"),
+  Color = c("Verde", "Amarillo", "Naranja", "Rojo", "Púrpura", "Marrón"),
+  Significado = c("La calidad del aire se considera satisfactoria y la contaminación atmosférica presenta un riesgo escaso o nulo.",
+                  "La calidad del aire es aceptable pero para algunos contaminantes podría existir una preocupación moderada para la salud de un grupo muy pequeño de personas excepcionalmente sensibles a la contaminación ambiental.",
+                  "Los miembros de grupos sensibles pueden padecer efectos en la salud. Probablemente no afectará a las personas en general.",
+                  "Todos pueden comenzar a padecer efectos en la salud y los miembros de grupos sensibles pueden padecer efectos más graves.",
+                  "Advertencias sanitarias de condiciones de emergencia. Son mayores las probabilidades de que toda la población esté afectada.",
+                  "Alerta sanitaria: todos pueden padecer efectos sanitarios más graves."))
+
+# Crear la tabla con gt
+data %>%
+  gt() %>%
+  tab_header(
+    title = "Índice de Calidad de Aire"
+  ) %>%
+  cols_label(
+    Categoria = "Categoría",
+    Rango_AQI = "Rango AQI",
+    Color = "Color",
+    Significado = "Significado"
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold", size = px(12), align = "center", v_align = "middle")  # Negrita, tamaño y centrado
+    ),
+    locations = cells_column_labels(c(Categoria, Rango_AQI, Color, Significado))  # Especifica las columnas
+  ) %>%
+  tab_style(style = list(cell_fill(color = rgb(158, 255, 145, maxColorValue = 255)),
+                         cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Buena"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(255, 201, 5, maxColorValue = 255)),
+      cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Moderada"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(255, 130, 5, maxColorValue = 255)),
+      cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Insalubre para grupos sensibles"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(240, 34, 0, maxColorValue = 255)),
+      cell_text(color = "black", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Insalubre"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = rgb(137, 9, 151, maxColorValue = 255)),
+      cell_text(color = "white", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Muy Insalubre"
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color =rgb(100, 0, 21, maxColorValue = 255)),
+      cell_text(color = "white", size = px(10))  # Tamaño de letra ajustado
+    ),
+    locations = cells_body(
+      columns = everything(),
+      rows = Categoria == "Peligrosa"
+    )
+  ) %>% 
+  tab_caption(caption = "Una manera muy útil de medir la calidad de aire de diferentes zonas del país era utilizando el Índice de Calidad de Aire
+del Perú, sin embargo, este instrumento técnico se encuentra desactualizado respecto a la normativa vigente. Por lo cual
+aquí se viene utilizando el Índice de Calidad de Aire (AQI por sus siglas en inglés) de la Agencia de Protección Ambiental
+de los Estados Unidos (US-EPA, 2024), cuya simbología se aprecia en la tabla")
+```
+
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 700
+data = {
+    'AQI': [50, 60, 55, 70, 75, 65],
+    'estación': [f'EMCA-0{i+1}' for i in range(6)],
+    'lat': [-18.004275, -17.993250, -17.980364, -18.00676, -18.03961, -18.02685],
+    'lon': [-70.257304, -70.243305, -70.239032, -70.23816, -70.25581, -70.2507],
+    'lugar': [
+        "Prolongación Hipólito Unanue 1269",
+        "IESTP Francisco de Paula Gonzales Vigil",
+        "I.E. Manuel A. Odría",
+        "Escuela de Posgrado UNJBG",
+        "I.E. Jorge Chávez",
+        "Universidad Nacional Jorge Basadre Grohmann"
+    ]
+}
+
+# Inserta tu valor AQI
+from shiny import reactive
+from shiny.express import input, ui
+from shinywidgets import render_widget
+import ipyleaflet as ipyl
+import pandas as pd
+
+df = pd.DataFrame(data)
+df = df.pivot_table(values = ['lat', 'lon'], columns = ["estación"])
+df = df.to_dict(orient='list')
+
+ui.input_select("center", "Estaciones", choices=list(df.keys()))
+
+@render_widget
+def map():
+    return ipyl.Map(zoom=17)
+
+@reactive.effect
+def _():
+    map.widget.center = df[input.center()]
+   
+```
 
 
 
-
-
-
-
-
-
-
-# Datos del 2025
-Estamos trabajando en eso...
-
-<!-- # Descarga de datos -->
-
-<!-- | Descripción                             | Links de descarga          | -->
-<!-- |-----------------------------------------|----------------------------| -->
-<!-- | Datos diarios de Calidad de aire del 2023 | [eca_2024](input/eca_2024.csv)     | -->
-<!-- | Datos diarios de Calidad de aire del 2024 | [eca_2024](input/eca_2024.csv)     | -->
-<!-- | Reporte de valores diarios mensuales   | [eca_2024](input/eca_2024.csv) | -->
-
-
-<!-- confirmar los cambios en git: -->
-<!-- git add . -->
-
-<!-- hacer un commit -->
-<!-- git commit -m "nombredelcommit" -->
-
-<!-- Hacer el push -->
-<!-- git push -u origin main -->
 
 
