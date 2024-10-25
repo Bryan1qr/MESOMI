@@ -15,13 +15,14 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
       as.POSIXct(paste(fecha_inicio, "00:00:00"), tz = "Etc/GMT"),
       as.POSIXct(paste(fecha_fin, "23:00:00"), tz = "Etc/GMT"),
       by = "1 hour")) %>% 
-    mutate_if(is.character, as.numeric) 
+    mutate_if(is.character, as.numeric) %>% 
+    mutate(across(-date, ~ ifelse(. < 0, NA, .)))
   
   g2 <- read.csv(
     gases, skip = 3, na.strings = "NAN") %>% 
-    select(c(1,3,4, 10, 17, 20, 27)) %>% 
+    select(c(1,3,4,5, 10, 17, 20, 27)) %>% 
     rename_at(vars(names(.)),~ c(
-      "date", "no", "no2", "so2",
+      "date", "no", "no2", "nox", "so2",
       "h2s", "co", "o3")) %>% 
     mutate(date = as.POSIXct(date, format = "%d/%m/%Y %H:%M", tz = "Etc/GMT")) %>% 
     filter(date %in% seq(
@@ -29,13 +30,27 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
       as.POSIXct(paste(fecha_fin, "23:00:00"), tz = "Etc/GMT"),
       by = "1 hour")) %>% 
     mutate_if(is.character, as.numeric)%>% 
-    mutate(
-      no = factor_eca(no, 30.00612),
-      no2 = factor_eca(no2, 46.00552),
-      so2 = factor_eca(so2, 64.06480),
-      h2s = factor_eca(h2s, 34.08196),
-      co = factor_eca(co, 28.01055),
-      o3 = factor_eca(o3, 47.99820))
+    mutate(no2 = if_else((no + no2)/nox >= 0.9 | (no + no2)/nox <= 1.1, no2, NA),
+           no2 = if_else(no2 > -500*0.006 & no2 < 0, 0, no2),
+           no2 = if_else(no2 < 0, NA, no2),
+           no = if_else(no > -500*0.006 & no < 0, 0, no),
+           no = if_else(no < 0, NA, no),
+           nox = if_else(nox > -500*0.012 & nox < 0, 0, nox),
+           nox = if_else(nox < 0, NA, nox),
+           so2 = if_else(so2 > -500*0.006 & so2 < 0, 0, so2),
+           so2 = if_else(so2 < 0, NA, so2),
+           h2s = if_else(h2s > -500*0.006 & h2s < 0, 0, h2s),
+           h2s = if_else(h2s < 0, NA, h2s),
+           co = if_else(co > -50000*0.008 & co < 0, 0, co),
+           co = if_else(co < 0, NA, co),
+           o3 = if_else(o3 > -500*0.006 & o3 < 0, 0, o3),
+           o3 = if_else(o3 < 0, NA, o3),
+           no = factor_eca(no, 30.00612),
+           no2 = factor_eca(no2, 46.00552),
+           so2 = factor_eca(so2, 64.06480),
+           h2s = factor_eca(h2s, 34.08196),
+           co = factor_eca(co, 28.01055),
+           o3 = factor_eca(o3, 47.99820)) %>% select(-nox)
   
   
   p3 <- read.csv(
@@ -50,20 +65,13 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
       as.POSIXct(paste(fecha_inicio, "00:00:00"), tz = "Etc/GMT"),
       as.POSIXct(paste(fecha_fin, "23:00:00"), tz = "Etc/GMT"),
       by = "1 hour")) %>% 
-    mutate_if(is.character, as.numeric)
+    mutate_if(is.character, as.numeric) %>% 
+    mutate(pm25 = if_else(pm25 >= 0, pm25, NA),
+           pm10 = if_else(pm10 >= 0, pm10, NA),
+           pm25 = if_else(pm25/pm10 <= 1 , pm25, NA),
+           pm10 = if_else(pm25/pm10 <= 1 , pm10, NA))
   
   df <- cbind(p3, m1[,-1], g2[, -1])
-  df <- df %>% 
-    mutate(pm25 = if_else(pm25 > -9.7 & pm25 < 0, 0, false = pm25),
-           pm25 = if_else(pm25 <= -9.7, NA, pm25),
-           pm10 = if_else(is.na(pm25), NA_real_, pm10),
-           pm10 = if_else(pm10 > -9.7 & pm10 < 0, 0, false = pm10),
-           no = if_else(no > -9.7 & no < 0, 0, false = no),
-           no2 = if_else(no2 > -9.7 & no2 < 0, 0, false = no2),
-           so2 = if_else(so2 > -9.7 & so2 < 0, 0, false = so2),
-           h2s = if_else(h2s > -9.7 & h2s < 0, 0, false = h2s),
-           co = if_else(co > -9.7 & co < 0, 0, false = co),
-           o3 = if_else(o3 > -9.7 & o3 < 0, 0, false = o3))
   
   a <- df  %>% 
     mutate(
@@ -88,8 +96,7 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
   eca <- df %>% 
     mutate(fecha = format(date, "%d-%B"),
            fecha2 = as.Date(date)) %>% 
-    group_by(fecha) %>% 
-    summarise(
+    reframe(
       pm25 = mean(pm25, na.rm = T),
       pm10 = mean(pm10, na.rm = T),
       no2 = mean(no2, na.rm = T),
@@ -97,8 +104,7 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
       h2s = mean(h2s, na.rm = T),
       co = mean(co, na.rm = T),
       co_1 = mean(co_1, na.rm = T),
-      o3 = max(o3, na.rm = T)
-    )
+      o3 = max(o3, na.rm = T), .by = fecha)
   if (tipo == "save") {
     openxlsx::write.xlsx(
       lst(df,eca), paste0(estacion, ".xlsx"))

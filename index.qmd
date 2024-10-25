@@ -76,11 +76,11 @@ df4 <- ECA(meteo = "input/CR1000_SETIEMBRE_JCHAVEZ_2024.csv",
           estacion = "JCHAVEZ",
           tipo = "lista")
 
-source("Scripts/ECA_provisional.R")
-df5 <- ECA(meteo = "input/meteo_unjbg_octubre.csv",
+df5 <- ECA(meteo = "input/CR1000_OCTUBRE_2024.csv",
           gases = "input/gases_unjbg_octubre.csv",
+          pm = "input/pm_octubre_unjbg.csv",
           fecha_inicio = "2024-09-27",
-          fecha_fin = "2024-10-02",
+          fecha_fin = "2024-10-08",
           estacion = "unjbg2",
           tipo = "lista")
 ```
@@ -114,7 +114,7 @@ dfm4 <- df4$df %>% mutate(lat = -18.03961, lon = -70.25581,
                         estacion = "EMCA - 05",
                         XD = "I.E. Jorge Chávez")
 
-dfm5 <- df4$df %>% mutate(lat = -18.02685, lon = -70.2507,
+dfm5 <- df5$df %>% mutate(lat = -18.02685, lon = -70.2507,
                         estacion = "EMCA - 06",
                         XD = "Universidad Nacional Jorge Basadre Grohmann")
 
@@ -571,9 +571,6 @@ param2 <- c(co =  "CO",
             so2 = "SO2")
 
 aqi_index(df$eca) %>%
-  mutate(aqi_ind = round(aqi_ind),
-         fecha = as.Date(fecha, format = "%d-%B"),
-         fecha = format(fecha, format = "%d")) %>%
   ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
   geom_tile(color = "white", lwd =1)+
   geom_text(aes(label = aqi_ind)) +
@@ -1003,16 +1000,13 @@ highchart() %>%
 
 ```{r}
 aqi_index(df1$eca) %>%
-  mutate(aqi_ind = round(aqi_ind),
-         fecha = as.Date(fecha, format = "%d-%B"),
-         fecha = format(fecha, format = "%d")) %>%
   ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
   geom_tile(color = "white", lwd =1)+
   geom_text(aes(label = aqi_ind)) +
   scale_fill_manual(values = aqi) +
   scale_y_discrete(labels = param2) +
   labs(x = "Dias de junio", y = "",
-       fill = "Categoría") +
+    fill = "Categoría") +
     theme_minimal()+
   theme(legend.position = "bottom",
         plot.title = element_text(hjust = 0.5)) -> aqi2
@@ -1436,9 +1430,6 @@ highchart() %>%
 ```{r}
 
 aqi_index(df2$eca) %>%
-  mutate(aqi_ind = round(aqi_ind),
-         fecha = as.Date(fecha, format = "%d-%B"),
-         fecha = format(fecha, format = "%d")) %>%
   ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
   geom_tile(color = "white", lwd =1)+
   geom_text(aes(label = aqi_ind)) +
@@ -1869,9 +1860,6 @@ highchart() %>%
 ```{r}
 
 aqi_index(df3$eca) %>%
-  mutate(aqi_ind = round(aqi_ind),
-         fecha = as.Date(fecha, format = "%d-%B"),
-         fecha = format(fecha, format = "%d")) %>%
   ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
   geom_tile(color = "white", lwd =1)+
   geom_text(aes(label = aqi_ind)) +
@@ -2302,9 +2290,6 @@ highchart() %>%
 ```{r}
 
 aqi_index(df4$eca) %>%
-  mutate(aqi_ind = round(aqi_ind),
-         fecha = as.Date(fecha, format = "%d-%B"),
-         fecha = format(fecha, format = "%d")) %>%
   ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
   geom_tile(color = "white", lwd =1)+
   geom_text(aes(label = aqi_ind)) +
@@ -2739,9 +2724,6 @@ highchart() %>%
 ```{r}
 
 aqi_index(df5$eca) %>%
-  mutate(aqi_ind = round(aqi_ind),
-         fecha = as.Date(fecha, format = "%d-%B"),
-         fecha = format(fecha, format = "%d")) %>%
   ggplot(aes(y = tipo,x = factor(fecha), fill = category)) +
   geom_tile(color = "white", lwd =1)+
   geom_text(aes(label = aqi_ind)) +
