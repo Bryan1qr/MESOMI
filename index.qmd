@@ -331,18 +331,40 @@ leaflet() %>%
   addFullscreenControl()
 ```
 
-```{r}
-a <- dfm %>% 
-  select(c(date, estacion, pm25, pm10, no2, so2, h2s, o3)) %>% 
-  pivot_longer(cols = -(1:2)) %>% 
-  reframe(value = mean(value, na.rm = TRUE), .by = c(estacion, name)) %>% 
-  ggplot(aes(x = estacion, y = value, fill = name)) +
-  geom_bar(stat = "identity") + 
-  facet_grid(name~., scales = "free_y") + theme_bw() +
-  theme(legend.position = "none") +
-  scale_fill_brewer(palette = "Set3")
 
-plotly::ggplotly(a)
+```{r}
+library(gt)
+
+
+data <- data.frame(
+  Etiqueta = c("Primer Reporte", "Segundo Reporte", "Tercer Reporte",
+               "Cuarto Reporte", "Quinto Reporte", "Sexto Reporte"),
+  Distrito = c(
+    "Tacna", "Alto de la Alianza", "Ciudad Nueva", "Tacna",
+    "Coronel Gregorio Albarracín Lanchipa", "Tacna"
+  ),
+  Referencia = c("Prolongación Hipólito Unanue 1269, Ex sede Gore-Tacna",
+                 "IESTP Francisco de Paula Gonzáles Vigil",
+                 "I.E. Manuel A. Odría", "Escuela de Posgrado UNJBG",
+                 "I.E. Jorge Chávez", "Universidad Nacional Jorge Basadre Grohmann"),
+  Botón = c("INFORMES TERMINADOS/EMCA-01_o.pdf", "INFORMES TERMINADOS/EMCA-02_o.pdf",
+            "INFORMES TERMINADOS/EMCA-03_o.pdf", "INFORMES TERMINADOS/EMCA-04_o.pdf",
+            "INFORMES TERMINADOS/EMCA-05_o.pdf", "INFORMES TERMINADOS/EMCA-06_o.pdf")
+)
+
+data %>%
+  gt() %>%
+  cols_label(
+    Etiqueta = "Reporte",
+    Botón = "Documento",
+    Distrito = "Distrito",
+    Referencia = "Referencia") %>%
+  fmt_url(
+    columns = 4, as_button = FALSE,label = c(
+      "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
+      "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF")) %>% 
+  tab_caption(caption = "La Siguiente tabla contiene los reportes generados correspondientes a cada punto de monitoreo evaluado en el año 2024, puedes visualizar cada reporte haciendo clic en el botón azul para abrir el PDF.")
+
 ```
 
 # **Datos del 2024**
@@ -3163,8 +3185,3 @@ def _():
     map.widget.center = df[input.center()]
    
 ```
-
-
-
-
-
