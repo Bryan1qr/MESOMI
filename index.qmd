@@ -368,11 +368,11 @@ data %>%
 
 # **Datos del 2024**
 
-##  {.sidebar width="20%"}
+<!-- ##  {.sidebar width="20%"} -->
 
-### Presentación
+<!-- ### Presentación -->
 
-Aquí te presentamos los datos de calidad de aire que viene registrando el Gobierno Regional de Tacna a través de su Estación de Monitoreo de Calidad de Aire.
+<!-- Aquí te presentamos los datos de calidad de aire que viene registrando el Gobierno Regional de Tacna a través de su Estación de Monitoreo de Calidad de Aire. -->
 
 ## Mapa web 2 {.tabset width="60%"}
 
@@ -386,24 +386,17 @@ windroseMap(data = dfm,
             breaks = c(0,0.2,1.5,3.3,5.4),
             include.lowest = FALSE,
             cols = "viridis",
-            provider = c("CartoDB.Positron",
-                      "OpenStreetMap", "Esri.WorldImagery"),
+            provider = c("OpenStreetMap", "Esri.WorldImagery"),
             legend.title = "Velocidad<br>del viento (m/s)",
             control.collapsed = TRUE, legend) %>% 
-  addMarkers(lat = -18.004275,
-            lng = -70.257304,
-            popup = paste(sep = "<br/>",
-            "<center><b>EMCA - 01</b>",
-            "Ex sede Hipólitu Unanue",
-            "Latitud:-18.004275", "Longitud: -70.257304",
-            "Calidad de aire: <b><font style='color:rgb(255,201,5)'>MODERADA</font></b>")) %>% 
-  addMarkers(lat = -17.993250,
-            lng = -70.243305,
-            popup = paste(sep = "<br/>",
-            "<center><b>EMCA - 02</b>",
-            "IESP Francisco de Paula Gonzáles Vigil",
-            "Latitud: -17.993250", "Longitud: -70.243305",
-            "Calidad de aire: <b><font style='color:rgb(255,201,5)'>MODERADA</font></b>")) %>% 
+  addMarkers(data = placexd, lng = ~lon, lat = ~lat,
+           popup = ~paste0(
+             "<center><b>",estación,
+             "<br/></b><center>", lugar,
+             "<br/><b>Latitud:</b> ", lat,
+             "<br/><b>Longitud:</b> ", lon,
+             "<br/><b>Calidad de Aire:</b> ",  
+             "<b><font style='color:rgb(255,201,5)'>MODERADA</font></b>")) %>% 
   addMeasure(primaryLengthUnit = "meters",
              primaryAreaUnit = "sqmeters") %>%  
   addSearchOSM() %>% 
@@ -419,20 +412,9 @@ polarMap(data = dfm,
          longitude = "lon",
          alpha = 0.85, cols = "jet",
          label = "estacion",
-         provider = c("CartoDB.Positron",
-                      "OpenStreetMap", "Esri.WorldImagery"),
+         provider = c("OpenStreetMap", "Esri.WorldImagery"),
          key = T,draw.legend = FALSE,
          control.collapsed = TRUE) %>% 
-    leaflet::addMarkers(label = ~ estacion,
-    labelOptions = labelOptions(noHide = FALSE, textOnly = FALSE,
-                                style = list(
-                                  "color" = "black",
-                                  "font-family" = "arial",
-                                  "font-style" = "bold",
-                                  "box-shadow" = "3px 3px rgba(0,0,0,0.15)",
-                                  "font-size" = "20px",
-                                  "border-color" = "rgba(0,0,0,0.15)"
-                                ))) %>% 
     addDrawToolbar(
     targetGroup = "drawnItems",  # Agrupar los elementos dibujados
     editOptions = editToolbarOptions(
