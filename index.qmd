@@ -329,44 +329,44 @@ leaflet() %>%
   addFullscreenControl()
 ```
 
-<!-- ```{r} -->
-<!-- #| title: "REPORTES DE MONITOREO" -->
-<!-- library(gt) -->
+```{r}
+#| title: "REPORTES DE MONITOREO"
+library(gt)
 
 
-<!-- data <- data.frame( -->
-<!--   Etiqueta = c("Primer Reporte", "Segundo Reporte", "Tercer Reporte", -->
-<!--                "Cuarto Reporte", "Quinto Reporte", "Sexto Reporte"), -->
-<!--   Distrito = c( -->
-<!--     "Tacna", "Alto de la Alianza", "Ciudad Nueva", "Tacna", -->
-<!--     "Coronel Gregorio Albarracín Lanchipa", "Tacna" -->
-<!--   ), -->
-<!--   # Referencia = c("Prolongación Hipólito Unanue 1269, Ex sede Gore-Tacna", -->
-<!--   #                "IESTP Francisco de Paula Gonzáles Vigil", -->
-<!--   #                "I.E. Manuel A. Odría", "Escuela de Posgrado UNJBG", -->
-<!--   #                "I.E. Jorge Chávez", "Universidad Nacional Jorge Basadre Grohmann"), -->
-<!--   Botón = c("INFORMES TERMINADOS/EMCA-01_o.pdf", "INFORMES TERMINADOS/EMCA-02_o.pdf", -->
-<!--             "INFORMES TERMINADOS/EMCA-03_o.pdf", "INFORMES TERMINADOS/EMCA-04_o.pdf", -->
-<!--             "INFORMES TERMINADOS/EMCA-05_o.pdf", "INFORMES TERMINADOS/EMCA-06_o.pdf") -->
-<!-- ) -->
+data <- data.frame(
+  Etiqueta = c("Primer Reporte", "Segundo Reporte", "Tercer Reporte",
+               "Cuarto Reporte", "Quinto Reporte", "Sexto Reporte"),
+  Distrito = c(
+    "Tacna", "Alto de la Alianza", "Ciudad Nueva", "Tacna",
+    "Coronel Gregorio Albarracín Lanchipa", "Tacna"
+  ),
+  # Referencia = c("Prolongación Hipólito Unanue 1269, Ex sede Gore-Tacna",
+  #                "IESTP Francisco de Paula Gonzáles Vigil",
+  #                "I.E. Manuel A. Odría", "Escuela de Posgrado UNJBG",
+  #                "I.E. Jorge Chávez", "Universidad Nacional Jorge Basadre Grohmann"),
+  Botón = c("INFORMES TERMINADOS/EMCA-01_o.pdf", "INFORMES TERMINADOS/EMCA-02_o.pdf",
+            "INFORMES TERMINADOS/EMCA-03_o.pdf", "INFORMES TERMINADOS/EMCA-04_o.pdf",
+            "INFORMES TERMINADOS/EMCA-05_o.pdf", "INFORMES TERMINADOS/EMCA-06_o.pdf")
+)
 
-<!-- data %>% -->
-<!--   gt() %>% -->
-<!--   cols_label( -->
-<!--     Etiqueta = "Reporte", -->
-<!--     Botón = "Documento", -->
-<!--     Distrito = "Distrito") %>% -->
-<!--   fmt_url( -->
-<!--     columns = 3, as_button = FALSE,label = c( -->
-<!--       "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF", -->
-<!--       "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF")) %>% -->
-<!--   tab_caption(caption = "La Siguiente tabla contiene los reportes correspondientes a cada punto de monitoreo evaluado en el año 2024.") %>%  -->
-<!--   tab_style( -->
-<!--     style = list( -->
-<!--       cell_text(weight = "bold", size = px(12), align = "center") -->
-<!--     ), locations = cells_body()) -->
+data %>%
+  gt() %>%
+  cols_label(
+    Etiqueta = "Reporte",
+    Botón = "Documento",
+    Distrito = "Distrito") %>%
+  fmt_url(
+    columns = 3, as_button = FALSE,label = c(
+      "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
+      "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF")) %>%
+  tab_caption(caption = "La Siguiente tabla contiene los reportes correspondientes a cada punto de monitoreo evaluado en el año 2024.") %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold", size = px(12), align = "center")
+    ), locations = cells_body())
 
-<!-- ``` -->
+```
 
 
 # **Datos del 2024**
