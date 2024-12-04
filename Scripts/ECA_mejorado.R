@@ -77,27 +77,7 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
            pm10 = if_else(!is.na(pm25) & pm25 / pm10 <= 1, pm10, pm10))
   
   df <- cbind(p3, m1[,-1], g2[, -1])
-  
-  a <- df  %>% 
-    mutate(
-      o3 = rollmean(o3, 6, fill = NA,
-                    align = c('right'),
-                    na.rm = T, hasNA = T),
-      co_1 = rollmean(co,6, fill = NA,
-                      align = c('right'),
-                      na.rm = T, hasNA = T)) %>% 
-    slice(1:7)
-  
-  b <- df  %>% 
-    mutate(o3 = rollmean(o3, 8, fill = NA,
-                         align = c('right'),
-                         na.rm = T, hasNA = T),
-           co_1 = rollmean(co,8, fill = NA,
-                           align = c('right'),
-                           na.rm = T, hasNA = T)) %>% 
-    slice(8:length(df$date))
-  
-  df <- rbind(a,b)
+
   eca <- df %>% 
     mutate(fecha = format(date, "%d-%B"),
            fecha2 = as.Date(date)) %>% 
