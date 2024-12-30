@@ -45,8 +45,6 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
            co = if_else(co < 0, NA, co),
            o3 = if_else(o3 > -0.5 & o3 < 0, 0, o3),
            o3 = if_else(o3 < 0, NA, o3),
-           
-           
            no = factor_eca(no, 30.00612),
            no2 = factor_eca(no2, 46.00552),
            so2 = factor_eca(so2, 64.06480),
@@ -57,7 +55,6 @@ ECA <- function(meteo, gases, pm, fecha_inicio, fecha_fin, estacion, tipo){
   g2 <- rollingMean(mydata = g2, pollutant = "o3", width = 8, new.name = "o3", align = "right")
   g2 <- rollingMean(mydata = g2, pollutant = "co", width = 8, new.name = "co_1", align = "right")
     
-  
   p3 <- read.csv(
     pm, skip = 3, na.strings = "NAN") %>% 
     mutate(date = as.POSIXct(
