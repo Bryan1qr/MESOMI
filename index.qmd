@@ -112,6 +112,16 @@ dmhoteles <- ECA(meteo = "input/CR1000_FEBRERO_DM_2025.csv",
           estacion = "DM HOTELES",
           tipo = "lista")
 
+source("Scripts/ECA_provisional_mejorado.R")
+
+odria <- ECA(meteo = "input/CR1000_ABRIL_ODRIA_2025.csv",
+    gases = "input/eca_odria_abril_2025.csv",
+    fecha_inicio = "2025-04-11 00:00:00",
+    fecha_fin = "2025-04-27 23:00",
+    estacion = "Odría",
+    tipo = "lista")
+
+
 dfm <- df$df %>% mutate(lat = -18.004275, lon = -70.257304,
                         estacion = "EMCA - 01",
                         XD = "Prolongación Hipólito Unanue")
@@ -150,7 +160,13 @@ df20253 <- dmhoteles$df %>% mutate(lat = -18.01429, lon = -70.24903,
                         estacion = "DM HOTELES",
                         XD = "DM Hoteles")
 
-dfm <- rbind(dfm, dfm1, dfm2, dfm3, dfm4, dfm5, df20251, df20252, df20253)
+df20254 <- odria$df %>% mutate(lat = -17.980364, lon = -70.239032,
+                        estacion = "ODRIA",
+                        XD = "I.E. Manuel A. Odría") %>% 
+  relocate(pm25, pm10, .after = 1) %>% 
+                        select(-o3) %>% rename(o3 = o3_8h, co_1 = co_8h)
+
+dfm <- rbind(dfm, dfm1, dfm2, dfm3, dfm4, dfm5, df20251, df20252, df20253, df20254)
 
 
 # names(dfm) <- c("FECHA", "HR", "PM25", "PM10", "PRESION", "PRECIPITACION", "TEMPERATURA", "DIRECCION_VIENTO", "VELOCIDAD_VIENTO", "RADIACION", "NO", "NO2", "NOX", "SO2", "H2S", "CO", "O3", "O3_8H", "CO_8H", "LAT", "LON", "ESTACION", "REFERENCIA")
@@ -300,14 +316,16 @@ aqqi <- function(db){
     summarize(ind = max(aqi_ind)) %>%
     summarize(ind = max(ind)) %>% pull()
 }
-
+odria$eca <- odria$eca %>% rename("o3" = "o3_8h", "co_1" = "co")
 placexd <- data.frame(AQI = c(
-  aqqi(dmhoteles$eca), aqqi(vigil$eca)),
-  estación = c("DM HOTELES", "VIGIL"),
-  lat = c(-18.01429, -17.99325),
-  lon = c(-70.24903, -70.24331),
+  aqqi(dmhoteles$eca), aqqi(vigil$eca), 
+    aqqi(odria$eca)),
+  estación = c("DM HOTELES", "VIGIL", "ODRIA"),
+  lat = c(-18.01429, -17.99325, -17.980364),
+  lon = c(-70.24903, -70.24331, -70.239032),
   lugar = c("DM Hoteles",
-            "IESTP Francisco de Paula Gonzales Vigil"))
+            "IESTP Francisco de Paula Gonzales Vigil",
+            "I.E. ManueL A. Odría"))
 
 placexd2 <- data.frame(AQI = c(
   mean(aqqi(df$eca), aqqi(unanue$eca)), aqqi(df1$eca),
@@ -380,16 +398,16 @@ library(gt)
 
 
 data <- data.frame(
-  Año = c(rep(2024, 7), rep(2025,2)),
+  Año = c(rep(2024, 7), rep(2025,3)),
   Etiqueta = c("Primer Reporte", "Segundo Reporte",
                "Tercer Reporte", "Cuarto Reporte",
                "Quinto Reporte", "Sexto Reporte",
                "Séptimo Reporte", "Octavo Reporte",
-               "Noveno Reporte"),
+               "Noveno Reporte", "Décimo Reporte"),
   Distrito = c(
     "Tacna", "Alto de la Alianza", "Ciudad Nueva", "Tacna",
     "Coronel Gregorio Albarracín Lanchipa", "Tacna", "Tacna",
-    "Tacna", "Alto de la alianza"),
+    "Tacna", "Alto de la alianza", "Ciudad Nueva"),
   # Referencia = c("Prolongación Hipólito Unanue 1269, Ex sede Gore-Tacna",
   #                "IESTP Francisco de Paula Gonzáles Vigil",
   #                "I.E. Manuel A. Odría", "Escuela de Posgrado UNJBG",
@@ -398,7 +416,7 @@ data <- data.frame(
             "INFORMES TERMINADOS/EMCA-03_o.pdf", "INFORMES TERMINADOS/EMCA-04_o.pdf",
             "INFORMES TERMINADOS/EMCA-05_o.pdf", "INFORMES TERMINADOS/EMCA-06_o.pdf",
             "INFORMES TERMINADOS/UNANUE_o.pdf","INFORMES TERMINADOS/DMHOTELES_o.pdf",
-            "INFORMES TERMINADOS/VIGIL2025.pdf")
+            "INFORMES TERMINADOS/VIGIL2025.pdf", "INFORMES TERMINADOS/ODRIA_o.pdf")
 )
 
 data %>%
@@ -412,7 +430,7 @@ data %>%
     columns = 4, as_button = FALSE,label = c(
       "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
       "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF",
-      "UNANUE PDF", "DM HOTELES PDF",  "VIGIL PDF")) %>%
+      "UNANUE PDF", "DM HOTELES PDF",  "VIGIL PDF", "ODRÍA PDF")) %>%
   tab_caption(caption = "La Siguiente tabla contiene los reportes correspondientes a cada punto de monitoreo evaluado en los años 2024 y 2025.") %>%
   tab_style(
     style = list(
@@ -434,7 +452,7 @@ data %>%
 
 ```{r}
 #| title: "Rosas de viento"
-windroseMap(data = dfm %>% filter(!estacion %in% c("VIGIL", "DM HOTELES")),
+windroseMap(data = dfm %>% filter(!estacion %in% c("VIGIL", "DM HOTELES", "ODRIA")),
             latitude = "lat",
             longitude = "lon",
             paddle = F,
@@ -461,7 +479,7 @@ windroseMap(data = dfm %>% filter(!estacion %in% c("VIGIL", "DM HOTELES")),
 
 ```{r}
 #| title: "Gráficos polares"
-polarMap(data = dfm %>% filter(!estacion %in% c("VIGIL", "DM HOTELES")),
+polarMap(data = dfm %>% filter(!estacion %in% c("VIGIL", "DM HOTELES", "ODRIA")),
          pollutant = c("pm10", "pm25", "no2",
                        "o3", "so2", "h2s", "co"),
          latitude = "lat",
@@ -3213,7 +3231,6 @@ datatable(
 ```
 
 # **Datos del 2025**
-
 
 ## Mapa web 2 {.tabset width="60%"}
 
