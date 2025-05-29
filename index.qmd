@@ -313,8 +313,8 @@ source("Scripts/AQI.R")
 aqqi <- function(db){
   aqi_index(db) %>%
     group_by(fecha) %>% 
-    summarize(ind = max(aqi_ind)) %>%
-    summarize(ind = max(ind)) %>% pull()
+    summarize(ind = max(aqi_ind, na.rm = T)) %>%
+    summarize(ind = max(ind, na.rm = T)) %>% pull()
 }
 odria$eca <- odria$eca %>% rename("o3" = "o3_8h", "co_1" = "co")
 placexd <- data.frame(AQI = c(
@@ -394,9 +394,11 @@ leaflet() %>%
 
 ```{r}
 #| title: "REPORTES DE MONITOREO"
-library(gt)
+library(dplyr)
+library(glue)
+library(reactable)
 
-
+# Datos originales
 data <- data.frame(
   Año = c(rep(2024, 7), rep(2025,3)),
   Etiqueta = c("Primer Reporte", "Segundo Reporte",
@@ -408,10 +410,6 @@ data <- data.frame(
     "Tacna", "Alto de la Alianza", "Ciudad Nueva", "Tacna",
     "Coronel Gregorio Albarracín Lanchipa", "Tacna", "Tacna",
     "Tacna", "Alto de la alianza", "Ciudad Nueva"),
-  # Referencia = c("Prolongación Hipólito Unanue 1269, Ex sede Gore-Tacna",
-  #                "IESTP Francisco de Paula Gonzáles Vigil",
-  #                "I.E. Manuel A. Odría", "Escuela de Posgrado UNJBG",
-  #                "I.E. Jorge Chávez", "Universidad Nacional Jorge Basadre Grohmann"),
   Botón = c("INFORMES TERMINADOS/EMCA-01_o.pdf", "INFORMES TERMINADOS/EMCA-02_o.pdf",
             "INFORMES TERMINADOS/EMCA-03_o.pdf", "INFORMES TERMINADOS/EMCA-04_o.pdf",
             "INFORMES TERMINADOS/EMCA-05_o.pdf", "INFORMES TERMINADOS/EMCA-06_o.pdf",
@@ -419,23 +417,31 @@ data <- data.frame(
             "INFORMES TERMINADOS/VIGIL2025.pdf", "INFORMES TERMINADOS/ODRIA_o.pdf")
 )
 
-data %>%
-  gt() %>%
-  cols_label(
-    Año = "Año",
-    Etiqueta = "Reporte",
-    Distrito = "Distrito",
-    Botón = "Documento") %>%
-  fmt_url(
-    columns = 4, as_button = FALSE,label = c(
-      "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
-      "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF",
-      "UNANUE PDF", "DM HOTELES PDF",  "VIGIL PDF", "ODRÍA PDF")) %>%
-  tab_caption(caption = "La Siguiente tabla contiene los reportes correspondientes a cada punto de monitoreo evaluado en los años 2024 y 2025.") %>%
-  tab_style(
-    style = list(
-      cell_text(weight = "bold", size = px(12), align = "center")
-    ), locations = cells_body())
+labels <- c(
+  "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
+  "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF",
+  "UNANUE PDF", "DM HOTELES PDF",  "VIGIL PDF", "ODRÍA PDF"
+)
+
+# Generar enlaces HTML
+data <- data %>%
+  mutate(
+    Documento = glue('<a href="{Botón}" target="_blank">{labels}</a>')
+  ) %>%
+  select(Año, Reporte = Etiqueta, Distrito, Documento)
+
+# Crear tabla con reactable
+reactable(
+  data,
+  columns = list(
+    Documento = colDef(html = TRUE)  # Importante: permite HTML sin escaparlo
+  ),
+  bordered = TRUE,
+  highlight = TRUE,
+  striped = TRUE,
+  defaultColDef = colDef(align = "center")
+)
+
 
 ```
 
