@@ -400,27 +400,28 @@ library(reactable)
 
 # Datos originales
 data <- data.frame(
-  Año = c(rep(2024, 7), rep(2025,3)),
+  Año = c(rep(2024, 7), rep(2025,4)),
   Etiqueta = c("Primer Reporte", "Segundo Reporte",
                "Tercer Reporte", "Cuarto Reporte",
                "Quinto Reporte", "Sexto Reporte",
                "Séptimo Reporte", "Octavo Reporte",
-               "Noveno Reporte", "Décimo Reporte"),
+               "Noveno Reporte", "Décimo Reporte", "Onceavo Reporte"),
   Distrito = c(
     "Tacna", "Alto de la Alianza", "Ciudad Nueva", "Tacna",
-    "Coronel Gregorio Albarracín Lanchipa", "Tacna", "Tacna",
-    "Tacna", "Alto de la alianza", "Ciudad Nueva"),
+    "GAL", "Tacna", "Tacna",
+    "Tacna", "Alto de la alianza", "Ciudad Nueva", "GAL"),
   Botón = c("INFORMES TERMINADOS/EMCA-01_o.pdf", "INFORMES TERMINADOS/EMCA-02_o.pdf",
             "INFORMES TERMINADOS/EMCA-03_o.pdf", "INFORMES TERMINADOS/EMCA-04_o.pdf",
             "INFORMES TERMINADOS/EMCA-05_o.pdf", "INFORMES TERMINADOS/EMCA-06_o.pdf",
             "INFORMES TERMINADOS/UNANUE_o.pdf","INFORMES TERMINADOS/DMHOTELES_o.pdf",
-            "INFORMES TERMINADOS/VIGIL2025.pdf", "INFORMES TERMINADOS/ODRIA_o.pdf")
+            "INFORMES TERMINADOS/VIGIL2025.pdf", "INFORMES TERMINADOS/ODRIA_o.pdf",
+            "INFORMES TERMINADOS/JCHAVEZ_o.pdf")
 )
 
 labels <- c(
   "EMCA-01 PDF", "EMCA-02 PDF","EMCA-03 PDF",
   "EMCA-04 PDF","EMCA-05 PDF", "EMCA-06 PDF",
-  "UNANUE PDF", "DM HOTELES PDF",  "VIGIL PDF", "ODRÍA PDF"
+  "UNANUE PDF", "DM HOTELES PDF",  "VIGIL PDF", "ODRÍA PDF", "JCHAVEZ PDF"
 )
 
 # Generar enlaces HTML
@@ -430,16 +431,18 @@ data <- data %>%
   ) %>%
   select(Año, Reporte = Etiqueta, Distrito, Documento)
 
-# Crear tabla con reactable
+# Crear tabla con reactable sin paginación
 reactable(
   data,
   columns = list(
-    Documento = colDef(html = TRUE)  # Importante: permite HTML sin escaparlo
+    Documento = colDef(html = TRUE)
   ),
   bordered = TRUE,
   highlight = TRUE,
   striped = TRUE,
-  defaultColDef = colDef(align = "center")
+  defaultColDef = colDef(align = "center"),
+  pagination = FALSE,
+  style = list(fontSize = "10px")
 )
 
 
