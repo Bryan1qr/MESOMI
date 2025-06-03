@@ -435,6 +435,10 @@ data <- data %>%
 reactable(
   data,
   columns = list(
+    Año = colDef(
+      align = "center",
+      width = 40  # Ajusta el ancho según sea necesario
+    ),
     Documento = colDef(html = TRUE)
   ),
   bordered = TRUE,
